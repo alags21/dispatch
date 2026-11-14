@@ -38,6 +38,6 @@ Python installs used `PIP_CERT=/run/proxy-ca.pem`; Node installs used `NODE_EXTR
 
 Real model credentials are unavailable, so no live-provider run, live benchmark or routing savings claim is made. Configure a current tool/JSON-capable OpenAI-compatible provider and actual tier prices, then validate it.
 
-GitHub is connected as alags21, but connector tools cannot create repositories; the separate cloud CLI credential is invalid. The requested remote repository has not been created or published. An empty repository with connected-app write access, or a repaired cloud GitHub connection with creation permission, is needed to finish publication.
+GitHub is connected as alags21, but connector tools cannot create repositories; the cloud CLI now authenticates successfully but GitHub rejects repository creation with `Resource not accessible by integration (createRepository)`. The requested remote repository has not been created or published. An empty repository with connected-app write access, or a cloud GitHub connection authorized for repository creation, is needed to finish publication.
 
 The application is a single-operator development MVP, not a hardened multitenant service. Docker isolation shares a kernel. No automatic cloning, dependency installation, code merge or deployment occurs. Recovery preserves queued jobs but fails interrupted active executions safely. Security scanners and generated tests are not complete proofs; review remains human-owned.

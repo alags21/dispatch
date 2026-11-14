@@ -9,7 +9,7 @@
 - [x] Phase 7: five independent benchmark fixtures; 15/15 scripted comparisons verified in Docker; measured JSON report
 - [x] Phase 8 independent checks: backend and browser suites, production build, migrations round trip, both container builds, Compose startup, actionlint, dependency audit, documentation
 - [ ] External: validate against a real model provider (credentials unavailable)
-- [ ] External: create/publish the GitHub repository (connected plugin cannot create repos; cloud CLI credential returns 401)
+- [ ] External: create/publish the GitHub repository (connected plugin has no creation tool; authenticated cloud CLI is denied createRepository permission)
 
 ## Acceptance checklist
 
@@ -51,7 +51,7 @@
 
 ## External blockers and exact next steps
 
-**GitHub:** The installed connector authenticates as `alags21`. It supports file/Git object writes but does not expose repository creation. The cloud's separate `gh api user` credential returns HTTP 401. A narrow lookup of `alags21/forgeops` returned 404 (missing or inaccessible). Create an empty repository and grant the GitHub app access, then provide its URL; alternatively reconnect the cloud environment's GitHub credential with repository-creation/write permission. No GitHub repository or remote publication is claimed.
+**GitHub:** The installed connector authenticates as `alags21`. It supports file/Git object writes but does not expose repository creation. The cloud CLI initially returned HTTP 401. On recheck, `gh api user` authenticated successfully as `alags21`, but `gh repo create alags21/forgeops --public` was rejected with `Resource not accessible by integration (createRepository)`. Authentication works; repository-creation permission is missing. A narrow lookup of `alags21/forgeops` returned 404 (missing or inaccessible). Create an empty repository and grant the GitHub app access, then provide its URL; alternatively authorize a cloud GitHub connection with repository-creation/write permission. No GitHub repository or remote publication is claimed.
 
 **Live models:** Set FORGEOPS_API_KEY, all three model IDs, current prices, and the compatible endpoint. Then submit a live run and run `benchmarks/run.py --mode live`. Until that happens, transport contract tests establish adapter mechanics only, not provider compatibility or autonomous task quality.
 

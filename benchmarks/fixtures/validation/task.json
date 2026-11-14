@@ -1,0 +1,8 @@
+{
+  "name": "validation",
+  "description": "Reject negative prices and zero or negative quantities in POST /quote with HTTP 422. Preserve valid quotes.",
+  "affected_files": [
+    "main.py"
+  ],
+  "expected_success": "All independently maintained validation tests pass; no blocking scanner findings"
+}

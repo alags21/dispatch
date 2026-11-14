@@ -1,0 +1,65 @@
+name: Verify ForgeOps
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: backend/pyproject.toml
+      - run: pip install -c backend/requirements.lock -e './backend[test]'
+      - run: docker build -f backend/sandbox.Dockerfile -t forgeops-sandbox:local backend
+      - run: docker build -f backend/semgrep.Dockerfile -t forgeops-sandbox:semgrep backend
+      - run: alembic upgrade head
+        working-directory: backend
+      - run: pytest backend/tests -q
+        env:
+          FORGEOPS_DOCKER_TESTS: '1'
+          FORGEOPS_SEMGREP_TESTS: '1'
+      - run: ruff check backend/app --select E9,F63,F7,F82
+      - run: python benchmarks/run.py --repeats 1
+      - uses: actions/upload-artifact@v4
+        with:
+          name: scripted-benchmark-evidence
+          path: benchmarks/report.json
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci --no-audit --no-fund
+        working-directory: frontend
+      - run: npm run typecheck && npm run build
+        working-directory: frontend
+  browser:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: pip install -c backend/requirements.lock -e './backend[test]'
+      - run: docker build -f backend/sandbox.Dockerfile -t forgeops-sandbox:local backend
+      - run: python demo/prepare.py
+      - run: alembic upgrade head
+        working-directory: backend
+      - run: uvicorn app.main:app --host 127.0.0.1 --port 8010 > /tmp/forgeops-api.log 2>&1 &
+        working-directory: backend
+      - run: npm ci --no-audit --no-fund && npx playwright install --with-deps chromium && npm run build
+        working-directory: frontend
+      - run: npm run test:e2e
+        working-directory: frontend

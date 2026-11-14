@@ -1,0 +1,33 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    ports: ["127.0.0.1:8010:8010"]
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      FORGEOPS_RUNTIME_DIR: ${PWD}/runtime
+      FORGEOPS_DATABASE_URL: sqlite:///${PWD}/runtime/forgeops.db
+      FORGEOPS_REPOSITORY_ROOT: /app/demo/repos
+      FORGEOPS_ALLOWED_ORIGIN: http://localhost:3000
+    volumes:
+      # Identical absolute runtime paths allow the Docker daemon to resolve child sandbox mounts.
+      - ${PWD}/runtime:${PWD}/runtime
+      - ./demo/repos:/app/demo/repos
+      - /var/run/docker.sock:/var/run/docker.sock
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8010/api/health')"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    init: true
+  frontend:
+    build:
+      context: frontend
+    ports: ["127.0.0.1:3000:3000"]
+    depends_on:
+      backend:
+        condition: service_healthy
+    init: true

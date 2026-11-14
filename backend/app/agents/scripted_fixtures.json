@@ -1,0 +1,33 @@
+{
+  "patches": {
+    "function": {
+      "domain.py": "def total(price, quantity):\n    return price * quantity\n\ndef average(values):\n    return sum(values) / len(values)\n"
+    },
+    "validation": {
+      "main.py": "from fastapi import FastAPI, HTTPException\nfrom pydantic import BaseModel, Field\nfrom domain import total, average\nfrom permissions import can_read\n\napp = FastAPI()\n\nclass Quote(BaseModel):\n    price: float = Field(ge=0)\n    quantity: int = Field(gt=0)\n\n@app.post(\"/quote\")\ndef quote(body: Quote):\n    return {\"total\": total(body.price, body.quantity)}\n\n@app.get(\"/documents/{document_id}\")\ndef document(document_id: int, user_id: int):\n    if not can_read(user_id, 7):\n        raise HTTPException(403, \"Forbidden\")\n    return {\"id\": document_id, \"owner_id\": 7}\n\n@app.get(\"/stats\")\ndef stats():\n    return {\"average\": average([])}\n"
+    },
+    "authorization": {
+      "permissions.py": "def can_read(user_id, owner_id):\n    return user_id == owner_id\n"
+    },
+    "edge": {
+      "domain.py": "def total(price, quantity):\n    return price + quantity\n\ndef average(values):\n    return sum(values) / len(values) if values else 0\n"
+    },
+    "feature": {
+      "main.py": "from fastapi import FastAPI, HTTPException\nfrom pydantic import BaseModel\nfrom domain import total, average\nfrom permissions import can_read\n\napp = FastAPI()\n\nclass Quote(BaseModel):\n    price: float\n    quantity: int\n\n@app.post(\"/quote\")\ndef quote(body: Quote):\n    return {\"total\": total(body.price, body.quantity)}\n\n@app.get(\"/documents/{document_id}\")\ndef document(document_id: int, user_id: int):\n    if not can_read(user_id, 7):\n        raise HTTPException(403, \"Forbidden\")\n    return {\"id\": document_id, \"owner_id\": 7}\n\n@app.get(\"/stats\")\ndef stats():\n    return {\"average\": average([])}\n\nfrom health import health_status\n\n@app.get(\"/health\")\ndef health():\n    return health_status()\n",
+      "health.py": "def health_status():\n    return {\"status\": \"ok\"}\n"
+    },
+    "demo": {
+      "main.py": "from fastapi import FastAPI, HTTPException\nfrom pydantic import BaseModel, Field\nfrom domain import total, average\nfrom permissions import can_read\n\napp = FastAPI()\n\nclass Quote(BaseModel):\n    price: float = Field(ge=0)\n    quantity: int = Field(gt=0)\n\n@app.post(\"/quote\")\ndef quote(body: Quote):\n    return {\"total\": total(body.price, body.quantity)}\n\n@app.get(\"/documents/{document_id}\")\ndef document(document_id: int, user_id: int):\n    if not can_read(user_id, 7):\n        raise HTTPException(403, \"Forbidden\")\n    return {\"id\": document_id, \"owner_id\": 7}\n\n@app.get(\"/stats\")\ndef stats():\n    return {\"average\": average([])}\n",
+      "domain.py": "def total(price, quantity):\n    return price * quantity\n\ndef average(values):\n    return sum(values) / len(values) if values else 0\n",
+      "permissions.py": "def can_read(user_id, owner_id):\n    return user_id == owner_id\n"
+    }
+  },
+  "tests": {
+    "function": "from domain import total\n\ndef test_total():\n    assert total(12.5, 4) == 50\n    assert total(8, 0) == 0\n    assert total(1.25, 3) == 3.75\n",
+    "validation": "from fastapi.testclient import TestClient\nfrom main import app\n\nclient = TestClient(app)\ndef test_validation():\n    for body in [{\"price\": -1, \"quantity\": 1}, {\"price\": 2, \"quantity\": 0}, {\"price\": 2, \"quantity\": -2}]:\n        assert client.post(\"/quote\", json=body).status_code == 422\n    assert client.post(\"/quote\", json={\"price\": 2, \"quantity\": 3}).status_code == 200\n",
+    "authorization": "from fastapi.testclient import TestClient\nfrom main import app\n\nclient = TestClient(app)\ndef test_authorization():\n    assert client.get(\"/documents/1?user_id=7\").status_code == 200\n    for user in [0, 6, 8, -1]:\n        assert client.get(f\"/documents/1?user_id={user}\").status_code == 403\n",
+    "edge": "from domain import average\n\ndef test_average():\n    assert average([]) == 0\n    assert average([2, 4, 6]) == 4\n    assert average([-4, 2]) == -1\n",
+    "feature": "from fastapi.testclient import TestClient\nfrom main import app\nfrom health import health_status\n\ndef test_health():\n    assert health_status() == {\"status\": \"ok\"}\n    client = TestClient(app)\n    assert client.get(\"/health\").json() == {\"status\": \"ok\"}\n    assert client.post(\"/quote\", json={\"price\":2,\"quantity\":2}).status_code == 200\n",
+    "demo": "from fastapi.testclient import TestClient\nfrom main import app\n\nclient = TestClient(app)\ndef test_requirements():\n    assert client.post(\"/quote\", json={\"price\": 3.5,\"quantity\":4}).json() == {\"total\":14}\n    for qty in [0,-1]:\n        assert client.post(\"/quote\", json={\"price\":1,\"quantity\":qty}).status_code == 422\n    assert client.get(\"/documents/1?user_id=2\").status_code == 403\n    assert client.get(\"/documents/1?user_id=7\").status_code == 200\n    assert client.get(\"/stats\").json() == {\"average\":0}\n"
+  }
+}

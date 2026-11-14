@@ -1,0 +1,8 @@
+{
+  "name": "function",
+  "description": "Fix total(price, quantity) to multiply unit price by quantity. Preserve numeric precision and support zero quantity.",
+  "affected_files": [
+    "domain.py"
+  ],
+  "expected_success": "All independently maintained validation tests pass; no blocking scanner findings"
+}

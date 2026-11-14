@@ -1,0 +1,13 @@
+.git
+.venv
+**/node_modules
+**/.next
+**/__pycache__
+**/runtime
+**/*.db
+**/.env
+work
+output
+
+**/.git
+demo/repos

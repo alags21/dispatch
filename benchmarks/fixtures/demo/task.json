@@ -1,0 +1,10 @@
+{
+  "name": "demo",
+  "description": "Fix quote multiplication; require nonnegative prices and strictly positive quantities (422 otherwise); enforce document ownership (owner 7 only); return 0 for an empty average. Preserve all routes.",
+  "affected_files": [
+    "main.py",
+    "domain.py",
+    "permissions.py"
+  ],
+  "expected_success": "All independently maintained validation tests pass; no blocking scanner findings"
+}

@@ -1,0 +1,978 @@
+{
+  "evidence_mode": "scripted_agents_real_docker_gates",
+  "detail": {
+    "run": {
+      "repository": "/workspace/forgeops/demo/repos/demo",
+      "task": "Fix quote multiplication; require nonnegative prices and strictly positive quantities (422 otherwise); enforce document ownership (owner 7 only); return 0 for an empty average. Preserve all routes.",
+      "policy": "adaptive",
+      "mode": "scripted",
+      "fixture": "demo",
+      "max_budget": 1.0,
+      "max_repairs": 2,
+      "max_tool_calls": 80,
+      "max_seconds": 300,
+      "id": "5dcef440-8820-41e1-b199-8ef05db3d954",
+      "status": "READY_FOR_REVIEW",
+      "created_at": "2026-11-14T23:02:45.567974+00:00",
+      "started_at": "2026-11-14T23:02:46.026500+00:00",
+      "ended_at": "2026-11-14T23:03:03.285707+00:00",
+      "base_commit": "ed1db52392bf31d4beb2a5e24c4c9d3e6561ef51",
+      "patch_hash": "cece5ba87784054a6970d44b41f6c983bf6b6d97e2bd306de9b7961fdc1c27fe",
+      "security_hash": "cece5ba87784054a6970d44b41f6c983bf6b6d97e2bd306de9b7961fdc1c27fe",
+      "test_hash": "cece5ba87784054a6970d44b41f6c983bf6b6d97e2bd306de9b7961fdc1c27fe",
+      "retries": 2,
+      "tool_calls": 16,
+      "cost": 0.0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "outcome": "Review-ready recommendation; no merge performed",
+      "cancel_requested": false,
+      "organization_id": null
+    },
+    "invocations": [
+      {
+        "id": 24,
+        "role": "planner",
+        "model": "scripted-fixture-oracle",
+        "tier": "medium",
+        "routing_reason": "stage=planner; structured engineering reasoning; security floor=medium",
+        "context_tokens": 462,
+        "input_tokens": null,
+        "output_tokens": null,
+        "cost": null,
+        "usage_source": "scripted",
+        "latency_ms": 2.6503650001359347,
+        "attempt": 0,
+        "success": true,
+        "failure_class": null
+      },
+      {
+        "id": 25,
+        "role": "engineer",
+        "model": "scripted-fixture-oracle",
+        "tier": "large",
+        "routing_reason": "stage=engineer; structured engineering reasoning; complexity/files/context/repository size; security floor=medium",
+        "context_tokens": 636,
+        "input_tokens": null,
+        "output_tokens": null,
+        "cost": null,
+        "usage_source": "scripted",
+        "latency_ms": 11.128125999903205,
+        "attempt": 0,
+        "success": true,
+        "failure_class": null
+      },
+      {
+        "id": 26,
+        "role": "security",
+        "model": "scripted-fixture-oracle",
+        "tier": "large",
+        "routing_reason": "stage=security; complexity/files/context/repository size; security floor=medium",
+        "context_tokens": 1041,
+        "input_tokens": null,
+        "output_tokens": null,
+        "cost": null,
+        "usage_source": "scripted",
+        "latency_ms": 1.4472820000719366,
+        "attempt": 0,
+        "success": true,
+        "failure_class": null
+      },
+      {
+        "id": 27,
+        "role": "engineer",
+        "model": "scripted-fixture-oracle",
+        "tier": "large",
+        "routing_reason": "stage=engineer; structured engineering reasoning; complexity/files/context/repository size; actionable failure escalation; security floor=medium",
+        "context_tokens": 787,
+        "input_tokens": null,
+        "output_tokens": null,
+        "cost": null,
+        "usage_source": "scripted",
+        "latency_ms": 12.006685000187645,
+        "attempt": 1,
+        "success": true,
+        "failure_class": null
+      },
+      {
+        "id": 28,
+        "role": "security",
+        "model": "scripted-fixture-oracle",
+        "tier": "large",
+        "routing_reason": "stage=security; complexity/files/context/repository size; actionable failure escalation; security floor=medium",
+        "context_tokens": 1036,
+        "input_tokens": null,
+        "output_tokens": null,
+        "cost": null,
+        "usage_source": "scripted",
+        "latency_ms": 2.1471780000865692,
+        "attempt": 1,
+        "success": true,
+        "failure_class": null
+      },
+      {
+        "id": 29,
+        "role": "tester",
+        "model": "scripted-fixture-oracle",
+        "tier": "large",
+        "routing_reason": "stage=tester; complexity/files/context/repository size; actionable failure escalation; security floor=medium",
+        "context_tokens": 997,
+        "input_tokens": null,
+        "output_tokens": null,
+        "cost": null,
+        "usage_source": "scripted",
+        "latency_ms": 3.4096709998721053,
+        "attempt": 1,
+        "success": true,
+        "failure_class": null
+      },
+      {
+        "id": 30,
+        "role": "engineer",
+        "model": "scripted-fixture-oracle",
+        "tier": "large",
+        "routing_reason": "stage=engineer; structured engineering reasoning; complexity/files/context/repository size; actionable failure escalation; security floor=medium",
+        "context_tokens": 1251,
+        "input_tokens": null,
+        "output_tokens": null,
+        "cost": null,
+        "usage_source": "scripted",
+        "latency_ms": 73.032504999901,
+        "attempt": 2,
+        "success": true,
+        "failure_class": null
+      },
+      {
+        "id": 31,
+        "role": "security",
+        "model": "scripted-fixture-oracle",
+        "tier": "large",
+        "routing_reason": "stage=security; complexity/files/context/repository size; actionable failure escalation; security floor=medium",
+        "context_tokens": 1036,
+        "input_tokens": null,
+        "output_tokens": null,
+        "cost": null,
+        "usage_source": "scripted",
+        "latency_ms": 1.8259239998315024,
+        "attempt": 2,
+        "success": true,
+        "failure_class": null
+      },
+      {
+        "id": 32,
+        "role": "tester",
+        "model": "scripted-fixture-oracle",
+        "tier": "large",
+        "routing_reason": "stage=tester; complexity/files/context/repository size; actionable failure escalation; security floor=medium",
+        "context_tokens": 997,
+        "input_tokens": null,
+        "output_tokens": null,
+        "cost": null,
+        "usage_source": "scripted",
+        "latency_ms": 9.053990000211343,
+        "attempt": 2,
+        "success": true,
+        "failure_class": null
+      },
+      {
+        "id": 33,
+        "role": "verifier",
+        "model": "scripted-fixture-oracle",
+        "tier": "large",
+        "routing_reason": "stage=verifier; structured engineering reasoning; complexity/files/context/repository size; actionable failure escalation; security floor=medium",
+        "context_tokens": 947,
+        "input_tokens": null,
+        "output_tokens": null,
+        "cost": null,
+        "usage_source": "scripted",
+        "latency_ms": 1.2899329999527254,
+        "attempt": 2,
+        "success": true,
+        "failure_class": null
+      }
+    ],
+    "cost_by_agent": {
+      "security": 0,
+      "verifier": 0,
+      "planner": 0,
+      "engineer": 0,
+      "tester": 0
+    },
+    "cost_data": "scripted_no_api_usage"
+  },
+  "events": [
+    {
+      "id": 38,
+      "run_id": "5dcef440-8820-41e1-b199-8ef05db3d954",
+      "state": "CREATED",
+      "timestamp": "2026-11-14T23:02:45.569419+00:00",
+      "detail": {
+        "mode": "scripted"
+      }
+    },
+    {
+      "id": 39,
+      "run_id": "5dcef440-8820-41e1-b199-8ef05db3d954",
+      "state": "ANALYZING",
+      "timestamp": "2026-11-14T23:02:46.029377+00:00",
+      "detail": {}
+    },
+    {
+      "id": 40,
+      "run_id": "5dcef440-8820-41e1-b199-8ef05db3d954",
+      "state": "PLANNING",
+      "timestamp": "2026-11-14T23:02:46.085864+00:00",
+      "detail": {}
+    },
+    {
+      "id": 41,
+      "run_id": "5dcef440-8820-41e1-b199-8ef05db3d954",
+      "state": "IMPLEMENTING",
+      "timestamp": "2026-11-14T23:02:46.097423+00:00",
+      "detail": {}
+    },
+    {
+      "id": 42,
+      "run_id": "5dcef440-8820-41e1-b199-8ef05db3d954",
+      "state": "SECURITY_REVIEW",
+      "timestamp": "2026-11-14T23:02:46.131473+00:00",
+      "detail": {
+        "patch_hash": "a9f28b59d14dbeca0f32889a4ac993ba7b8e899651b6abbeaa0bcb50f843461f"
+      }
+    },
+    {
+      "id": 43,
+      "run_id": "5dcef440-8820-41e1-b199-8ef05db3d954",
+      "state": "REPAIRING",
+      "timestamp": "2026-11-14T23:02:50.481185+00:00",
+      "detail": {
+        "attempt": 1,
+        "failure_class": "security_failure",
+        "feedback": {
+          "security_findings": [
+            {
+              "severity": "medium",
+              "source": "bandit",
+              "verified": true,
+              "message": "Use of possibly insecure function - consider using safer ast.literal_eval.",
+              "evidence": "./domain.py:2 1 def total(price, quantity):\n2     return eval(\"price * quantity\")\n3 \n",
+              "remediation": "https://bandit.readthedocs.io/en/1.8.3/blacklists/blacklist_calls.html#b307-eval"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 44,
+      "run_id": "5dcef440-8820-41e1-b199-8ef05db3d954",
+      "state": "IMPLEMENTING",
+      "timestamp": "2026-11-14T23:02:50.482543+00:00",
+      "detail": {}
+    },
+    {
+      "id": 45,
+      "run_id": "5dcef440-8820-41e1-b199-8ef05db3d954",
+      "state": "SECURITY_REVIEW",
+      "timestamp": "2026-11-14T23:02:50.523803+00:00",
+      "detail": {
+        "patch_hash": "151b2e281ab27ed92afb3f2bd1e5de9890f8016d3415278205f2dd996b38e8fb"
+      }
+    },
+    {
+      "id": 46,
+      "run_id": "5dcef440-8820-41e1-b199-8ef05db3d954",
+      "state": "TESTING",
+      "timestamp": "2026-11-14T23:02:52.747367+00:00",
+      "detail": {
+        "patch_hash": "151b2e281ab27ed92afb3f2bd1e5de9890f8016d3415278205f2dd996b38e8fb"
+      }
+    },
+    {
+      "id": 47,
+      "run_id": "5dcef440-8820-41e1-b199-8ef05db3d954",
+      "state": "REPAIRING",
+      "timestamp": "2026-11-14T23:02:56.099440+00:00",
+      "detail": {
+        "attempt": 2,
+        "failure_class": "test_failure",
+        "feedback": {
+          "test_failures": {
+            "passed": false,
+            "command": [
+              "pytest",
+              "-q",
+              "-p",
+              "no:cacheprovider",
+              "--import-mode=importlib",
+              "tests",
+              "/validation"
+            ],
+            "exit_code": 1,
+            "stdout": ".F                                                                       [100%]\n=================================== FAILURES ===================================\n______________________________ test_requirements _______________________________\n\n    def test_requirements():\n        assert client.post(\"/quote\", json={\"price\": 3.5,\"quantity\":4}).json() == {\"total\":14}\n        for qty in [0,-1]:\n>           assert client.post(\"/quote\", json={\"price\":1,\"quantity\":qty}).status_code == 422\nE           AssertionError: assert 200 == 422\nE            +  where 200 = <Response [200 OK]>.status_code\nE            +    where <Response [200 OK]> = post('/quote', json={'price': 1, 'quantity': 0})\nE            +      where post = <starlette.testclient.TestClient object at 0x7f689c5a3590>.post\n\n/validation/generated/test_requirements.py:8: AssertionError\n=============================== warnings summary ===============================\n../usr/local/lib/python3.12/site-packages/starlette/testclient.py:37\n  /usr/local/lib/python3.12/site-packages/starlette/testclient.py:37: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.\n    _PortalFactoryType = typing.Callable[[], typing.ContextManager[anyio.abc.BlockingPortal]]\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n=========================== short test summary info ============================\nFAILED ../validation/generated/test_requirements.py::test_requirements - Asse...\n1 failed, 1 passed, 1 warning in 0.35s\n",
+            "timed_out": false
+          }
+        }
+      }
+    },
+    {
+      "id": 48,
+      "run_id": "5dcef440-8820-41e1-b199-8ef05db3d954",
+      "state": "IMPLEMENTING",
+      "timestamp": "2026-11-14T23:02:56.102385+00:00",
+      "detail": {}
+    },
+    {
+      "id": 49,
+      "run_id": "5dcef440-8820-41e1-b199-8ef05db3d954",
+      "state": "SECURITY_REVIEW",
+      "timestamp": "2026-11-14T23:02:56.257402+00:00",
+      "detail": {
+        "patch_hash": "cece5ba87784054a6970d44b41f6c983bf6b6d97e2bd306de9b7961fdc1c27fe"
+      }
+    },
+    {
+      "id": 50,
+      "run_id": "5dcef440-8820-41e1-b199-8ef05db3d954",
+      "state": "TESTING",
+      "timestamp": "2026-11-14T23:03:00.238670+00:00",
+      "detail": {
+        "patch_hash": "cece5ba87784054a6970d44b41f6c983bf6b6d97e2bd306de9b7961fdc1c27fe"
+      }
+    },
+    {
+      "id": 52,
+      "run_id": "5dcef440-8820-41e1-b199-8ef05db3d954",
+      "state": "FINAL_VERIFICATION",
+      "timestamp": "2026-11-14T23:03:03.267104+00:00",
+      "detail": {}
+    },
+    {
+      "id": 53,
+      "run_id": "5dcef440-8820-41e1-b199-8ef05db3d954",
+      "state": "READY_FOR_REVIEW",
+      "timestamp": "2026-11-14T23:03:03.285846+00:00",
+      "detail": {}
+    }
+  ],
+  "artifacts": [
+    {
+      "id": 75,
+      "kind": "planner",
+      "patch_hash": null,
+      "created_at": "2026-11-14T23:02:46.096054+00:00",
+      "content": {
+        "output": {
+          "summary": "Scripted fixture implementation plan",
+          "affected_files": [
+            "main.py",
+            "domain.py",
+            "permissions.py"
+          ],
+          "steps": [
+            "Implement requested behavior",
+            "Run security and independent tests"
+          ],
+          "acceptance_criteria": [
+            "Fix quote multiplication; require nonnegative prices and strictly positive quantities (422 otherwise); enforce document ownership (owner 7 only); return 0 for an empty average. Preserve all routes."
+          ],
+          "risks": [
+            "Regression of existing behavior"
+          ],
+          "testing_strategy": "Existing tests and independently maintained acceptance cases"
+        },
+        "context": {
+          "estimated_tokens": 462,
+          "omitted": []
+        },
+        "model_calls": 1
+      }
+    },
+    {
+      "id": 76,
+      "kind": "tool",
+      "patch_hash": null,
+      "created_at": "2026-11-14T23:02:46.106144+00:00",
+      "content": {
+        "role": "engineer",
+        "name": "apply_patch",
+        "path": "main.py",
+        "result": "{'written': 'main.py'}"
+      }
+    },
+    {
+      "id": 77,
+      "kind": "tool",
+      "patch_hash": null,
+      "created_at": "2026-11-14T23:02:46.109578+00:00",
+      "content": {
+        "role": "engineer",
+        "name": "apply_patch",
+        "path": "domain.py",
+        "result": "{'written': 'domain.py'}"
+      }
+    },
+    {
+      "id": 78,
+      "kind": "tool",
+      "patch_hash": null,
+      "created_at": "2026-11-14T23:02:46.112087+00:00",
+      "content": {
+        "role": "engineer",
+        "name": "apply_patch",
+        "path": "permissions.py",
+        "result": "{'written': 'permissions.py'}"
+      }
+    },
+    {
+      "id": 79,
+      "kind": "engineer",
+      "patch_hash": null,
+      "created_at": "2026-11-14T23:02:46.115006+00:00",
+      "content": {
+        "output": {
+          "summary": "Scripted engineer fixture response",
+          "findings": [],
+          "criteria": {
+            "Fix quote multiplication; require nonnegative prices and strictly positive quantities (422 otherwise); enforce document ownership (owner 7 only); return 0 for an empty average. Preserve all routes.": true
+          },
+          "recommendation": "review",
+          "residual_risks": [
+            "Scripted fixture demonstration; human review required"
+          ]
+        },
+        "context": {
+          "estimated_tokens": 636,
+          "omitted": []
+        },
+        "model_calls": 1
+      }
+    },
+    {
+      "id": 80,
+      "kind": "patch",
+      "patch_hash": "a9f28b59d14dbeca0f32889a4ac993ba7b8e899651b6abbeaa0bcb50f843461f",
+      "created_at": "2026-11-14T23:02:46.129866+00:00",
+      "content": {
+        "diff": "diff --git a/domain.py b/domain.py\nindex c5635aa..1fcfd84 100644\n--- a/domain.py\n+++ b/domain.py\n@@ -1,5 +1,5 @@\n def total(price, quantity):\n-    return price + quantity\n+    return eval(\"price * quantity\")\n \n def average(values):\n-    return sum(values) / len(values)\n+    return sum(values) / len(values) if values else 0\ndiff --git a/main.py b/main.py\nindex 5b55e8c..07c828b 100644\n--- a/main.py\n+++ b/main.py\n@@ -1,13 +1,13 @@\n from fastapi import FastAPI, HTTPException\n-from pydantic import BaseModel\n+from pydantic import BaseModel, Field\n from domain import total, average\n from permissions import can_read\n \n app = FastAPI()\n \n class Quote(BaseModel):\n-    price: float\n-    quantity: int\n+    price: float = Field(ge=0)\n+    quantity: int = Field(ge=0)\n \n @app.post(\"/quote\")\n def quote(body: Quote):\ndiff --git a/permissions.py b/permissions.py\nindex c10cbac..08d5f26 100644\n--- a/permissions.py\n+++ b/permissions.py\n@@ -1,2 +1,2 @@\n def can_read(user_id, owner_id):\n-    return True\n+    return user_id == owner_id\n",
+        "changed_files": [
+          "domain.py",
+          "main.py",
+          "permissions.py"
+        ],
+        "summary": "Scripted engineer fixture response",
+        "version": 1
+      }
+    },
+    {
+      "id": 81,
+      "kind": "security",
+      "patch_hash": null,
+      "created_at": "2026-11-14T23:02:46.145633+00:00",
+      "content": {
+        "output": {
+          "summary": "Scripted security fixture response",
+          "findings": [],
+          "criteria": {
+            "Fix quote multiplication; require nonnegative prices and strictly positive quantities (422 otherwise); enforce document ownership (owner 7 only); return 0 for an empty average. Preserve all routes.": true
+          },
+          "recommendation": "review",
+          "residual_risks": [
+            "Scripted fixture demonstration; human review required"
+          ]
+        },
+        "context": {
+          "estimated_tokens": 1041,
+          "omitted": []
+        },
+        "model_calls": 1
+      }
+    },
+    {
+      "id": 82,
+      "kind": "security_results",
+      "patch_hash": "a9f28b59d14dbeca0f32889a4ac993ba7b8e899651b6abbeaa0bcb50f843461f",
+      "created_at": "2026-11-14T23:02:50.471656+00:00",
+      "content": {
+        "passed": false,
+        "findings": [
+          {
+            "severity": "medium",
+            "source": "bandit",
+            "verified": true,
+            "message": "Use of possibly insecure function - consider using safer ast.literal_eval.",
+            "evidence": "./domain.py:2 1 def total(price, quantity):\n2     return eval(\"price * quantity\")\n3 \n",
+            "remediation": "https://bandit.readthedocs.io/en/1.8.3/blacklists/blacklist_calls.html#b307-eval"
+          }
+        ],
+        "scanners": [
+          {
+            "command": [
+              "bandit",
+              "-q",
+              "-f",
+              "json",
+              "-ll",
+              "domain.py",
+              "main.py",
+              "permissions.py"
+            ],
+            "exit_code": 1,
+            "stdout": "{\n  \"errors\": [],\n  \"generated_at\": \"2026-11-14T23:02:50Z\",\n  \"metrics\": {\n    \"./domain.py\": {\n      \"CONFIDENCE.HIGH\": 1,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 1,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 4,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    },\n    \"./main.py\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 19,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    },\n    \"./permissions.py\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 2,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    },\n    \"_totals\": {\n      \"CONFIDENCE.HIGH\": 1,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 1,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 25,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    }\n  },\n  \"results\": [\n    {\n      \"code\": \"1 def total(price, quantity):\\n2     return eval(\\\"price * quantity\\\")\\n3 \\n\",\n      \"col_offset\": 11,\n      \"end_col_offset\": 35,\n      \"filename\": \"./domain.py\",\n      \"issue_confidence\": \"HIGH\",\n      \"issue_cwe\": {\n        \"id\": 78,\n        \"link\": \"https://cwe.mitre.org/data/definitions/78.html\"\n      },\n      \"issue_severity\": \"MEDIUM\",\n      \"issue_text\": \"Use of possibly insecure function - consider using safer ast.literal_eval.\",\n      \"line_number\": 2,\n      \"line_range\": [\n        2\n      ],\n      \"more_info\": \"https://bandit.readthedocs.io/en/1.8.3/blacklists/blacklist_calls.html#b307-eval\",\n      \"test_id\": \"B307\",\n      \"test_name\": \"blacklist\"\n    }\n  ]\n}",
+            "timed_out": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 83,
+      "kind": "tool",
+      "patch_hash": null,
+      "created_at": "2026-11-14T23:02:50.496382+00:00",
+      "content": {
+        "role": "engineer",
+        "name": "apply_patch",
+        "path": "main.py",
+        "result": "{'written': 'main.py'}"
+      }
+    },
+    {
+      "id": 84,
+      "kind": "tool",
+      "patch_hash": null,
+      "created_at": "2026-11-14T23:02:50.498736+00:00",
+      "content": {
+        "role": "engineer",
+        "name": "apply_patch",
+        "path": "domain.py",
+        "result": "{'written': 'domain.py'}"
+      }
+    },
+    {
+      "id": 85,
+      "kind": "tool",
+      "patch_hash": null,
+      "created_at": "2026-11-14T23:02:50.501569+00:00",
+      "content": {
+        "role": "engineer",
+        "name": "apply_patch",
+        "path": "permissions.py",
+        "result": "{'written': 'permissions.py'}"
+      }
+    },
+    {
+      "id": 86,
+      "kind": "engineer",
+      "patch_hash": null,
+      "created_at": "2026-11-14T23:02:50.504795+00:00",
+      "content": {
+        "output": {
+          "summary": "Scripted engineer fixture response",
+          "findings": [],
+          "criteria": {
+            "Fix quote multiplication; require nonnegative prices and strictly positive quantities (422 otherwise); enforce document ownership (owner 7 only); return 0 for an empty average. Preserve all routes.": true
+          },
+          "recommendation": "review",
+          "residual_risks": [
+            "Scripted fixture demonstration; human review required"
+          ]
+        },
+        "context": {
+          "estimated_tokens": 787,
+          "omitted": []
+        },
+        "model_calls": 1
+      }
+    },
+    {
+      "id": 87,
+      "kind": "patch",
+      "patch_hash": "151b2e281ab27ed92afb3f2bd1e5de9890f8016d3415278205f2dd996b38e8fb",
+      "created_at": "2026-11-14T23:02:50.520390+00:00",
+      "content": {
+        "diff": "diff --git a/domain.py b/domain.py\nindex c5635aa..198e4f0 100644\n--- a/domain.py\n+++ b/domain.py\n@@ -1,5 +1,5 @@\n def total(price, quantity):\n-    return price + quantity\n+    return price * quantity\n \n def average(values):\n-    return sum(values) / len(values)\n+    return sum(values) / len(values) if values else 0\ndiff --git a/main.py b/main.py\nindex 5b55e8c..07c828b 100644\n--- a/main.py\n+++ b/main.py\n@@ -1,13 +1,13 @@\n from fastapi import FastAPI, HTTPException\n-from pydantic import BaseModel\n+from pydantic import BaseModel, Field\n from domain import total, average\n from permissions import can_read\n \n app = FastAPI()\n \n class Quote(BaseModel):\n-    price: float\n-    quantity: int\n+    price: float = Field(ge=0)\n+    quantity: int = Field(ge=0)\n \n @app.post(\"/quote\")\n def quote(body: Quote):\ndiff --git a/permissions.py b/permissions.py\nindex c10cbac..08d5f26 100644\n--- a/permissions.py\n+++ b/permissions.py\n@@ -1,2 +1,2 @@\n def can_read(user_id, owner_id):\n-    return True\n+    return user_id == owner_id\n",
+        "changed_files": [
+          "domain.py",
+          "main.py",
+          "permissions.py"
+        ],
+        "summary": "Scripted engineer fixture response",
+        "version": 2
+      }
+    },
+    {
+      "id": 88,
+      "kind": "security",
+      "patch_hash": null,
+      "created_at": "2026-11-14T23:02:50.543027+00:00",
+      "content": {
+        "output": {
+          "summary": "Scripted security fixture response",
+          "findings": [],
+          "criteria": {
+            "Fix quote multiplication; require nonnegative prices and strictly positive quantities (422 otherwise); enforce document ownership (owner 7 only); return 0 for an empty average. Preserve all routes.": true
+          },
+          "recommendation": "review",
+          "residual_risks": [
+            "Scripted fixture demonstration; human review required"
+          ]
+        },
+        "context": {
+          "estimated_tokens": 1036,
+          "omitted": []
+        },
+        "model_calls": 1
+      }
+    },
+    {
+      "id": 89,
+      "kind": "security_results",
+      "patch_hash": "151b2e281ab27ed92afb3f2bd1e5de9890f8016d3415278205f2dd996b38e8fb",
+      "created_at": "2026-11-14T23:02:52.739609+00:00",
+      "content": {
+        "passed": true,
+        "findings": [],
+        "scanners": [
+          {
+            "command": [
+              "bandit",
+              "-q",
+              "-f",
+              "json",
+              "-ll",
+              "domain.py",
+              "main.py",
+              "permissions.py"
+            ],
+            "exit_code": 0,
+            "stdout": "{\n  \"errors\": [],\n  \"generated_at\": \"2026-11-14T23:02:52Z\",\n  \"metrics\": {\n    \"./domain.py\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 4,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    },\n    \"./main.py\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 19,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    },\n    \"./permissions.py\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 2,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    },\n    \"_totals\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 25,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    }\n  },\n  \"results\": []\n}",
+            "timed_out": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 90,
+      "kind": "tool",
+      "patch_hash": null,
+      "created_at": "2026-11-14T23:02:52.759106+00:00",
+      "content": {
+        "role": "tester",
+        "name": "write_test",
+        "path": "test_requirements.py",
+        "result": "{'generated': 'test_requirements.py'}"
+      }
+    },
+    {
+      "id": 91,
+      "kind": "tester",
+      "patch_hash": null,
+      "created_at": "2026-11-14T23:02:52.760740+00:00",
+      "content": {
+        "output": {
+          "summary": "Scripted tester fixture response",
+          "findings": [],
+          "criteria": {
+            "Fix quote multiplication; require nonnegative prices and strictly positive quantities (422 otherwise); enforce document ownership (owner 7 only); return 0 for an empty average. Preserve all routes.": true
+          },
+          "recommendation": "review",
+          "residual_risks": [
+            "Scripted fixture demonstration; human review required"
+          ]
+        },
+        "context": {
+          "estimated_tokens": 997,
+          "omitted": []
+        },
+        "model_calls": 1
+      }
+    },
+    {
+      "id": 92,
+      "kind": "generated_tests",
+      "patch_hash": "151b2e281ab27ed92afb3f2bd1e5de9890f8016d3415278205f2dd996b38e8fb",
+      "created_at": "2026-11-14T23:02:52.761687+00:00",
+      "content": {
+        "test_requirements.py": "from fastapi.testclient import TestClient\nfrom main import app\n\nclient = TestClient(app)\ndef test_requirements():\n    assert client.post(\"/quote\", json={\"price\": 3.5,\"quantity\":4}).json() == {\"total\":14}\n    for qty in [0,-1]:\n        assert client.post(\"/quote\", json={\"price\":1,\"quantity\":qty}).status_code == 422\n    assert client.get(\"/documents/1?user_id=2\").status_code == 403\n    assert client.get(\"/documents/1?user_id=7\").status_code == 200\n    assert client.get(\"/stats\").json() == {\"average\":0}\n"
+      }
+    },
+    {
+      "id": 93,
+      "kind": "test_results",
+      "patch_hash": "151b2e281ab27ed92afb3f2bd1e5de9890f8016d3415278205f2dd996b38e8fb",
+      "created_at": "2026-11-14T23:02:56.079735+00:00",
+      "content": {
+        "passed": false,
+        "command": [
+          "pytest",
+          "-q",
+          "-p",
+          "no:cacheprovider",
+          "--import-mode=importlib",
+          "tests",
+          "/validation"
+        ],
+        "exit_code": 1,
+        "stdout": ".F                                                                       [100%]\n=================================== FAILURES ===================================\n______________________________ test_requirements _______________________________\n\n    def test_requirements():\n        assert client.post(\"/quote\", json={\"price\": 3.5,\"quantity\":4}).json() == {\"total\":14}\n        for qty in [0,-1]:\n>           assert client.post(\"/quote\", json={\"price\":1,\"quantity\":qty}).status_code == 422\nE           AssertionError: assert 200 == 422\nE            +  where 200 = <Response [200 OK]>.status_code\nE            +    where <Response [200 OK]> = post('/quote', json={'price': 1, 'quantity': 0})\nE            +      where post = <starlette.testclient.TestClient object at 0x7f689c5a3590>.post\n\n/validation/generated/test_requirements.py:8: AssertionError\n=============================== warnings summary ===============================\n../usr/local/lib/python3.12/site-packages/starlette/testclient.py:37\n  /usr/local/lib/python3.12/site-packages/starlette/testclient.py:37: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.\n    _PortalFactoryType = typing.Callable[[], typing.ContextManager[anyio.abc.BlockingPortal]]\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n=========================== short test summary info ============================\nFAILED ../validation/generated/test_requirements.py::test_requirements - Asse...\n1 failed, 1 passed, 1 warning in 0.35s\n",
+        "timed_out": false
+      }
+    },
+    {
+      "id": 94,
+      "kind": "tool",
+      "patch_hash": null,
+      "created_at": "2026-11-14T23:02:56.190641+00:00",
+      "content": {
+        "role": "engineer",
+        "name": "apply_patch",
+        "path": "main.py",
+        "result": "{'written': 'main.py'}"
+      }
+    },
+    {
+      "id": 95,
+      "kind": "tool",
+      "patch_hash": null,
+      "created_at": "2026-11-14T23:02:56.215331+00:00",
+      "content": {
+        "role": "engineer",
+        "name": "apply_patch",
+        "path": "domain.py",
+        "result": "{'written': 'domain.py'}"
+      }
+    },
+    {
+      "id": 96,
+      "kind": "tool",
+      "patch_hash": null,
+      "created_at": "2026-11-14T23:02:56.233153+00:00",
+      "content": {
+        "role": "engineer",
+        "name": "apply_patch",
+        "path": "permissions.py",
+        "result": "{'written': 'permissions.py'}"
+      }
+    },
+    {
+      "id": 97,
+      "kind": "engineer",
+      "patch_hash": null,
+      "created_at": "2026-11-14T23:02:56.236345+00:00",
+      "content": {
+        "output": {
+          "summary": "Scripted engineer fixture response",
+          "findings": [],
+          "criteria": {
+            "Fix quote multiplication; require nonnegative prices and strictly positive quantities (422 otherwise); enforce document ownership (owner 7 only); return 0 for an empty average. Preserve all routes.": true
+          },
+          "recommendation": "review",
+          "residual_risks": [
+            "Scripted fixture demonstration; human review required"
+          ]
+        },
+        "context": {
+          "estimated_tokens": 1251,
+          "omitted": []
+        },
+        "model_calls": 1
+      }
+    },
+    {
+      "id": 98,
+      "kind": "patch",
+      "patch_hash": "cece5ba87784054a6970d44b41f6c983bf6b6d97e2bd306de9b7961fdc1c27fe",
+      "created_at": "2026-11-14T23:02:56.255686+00:00",
+      "content": {
+        "diff": "diff --git a/domain.py b/domain.py\nindex c5635aa..198e4f0 100644\n--- a/domain.py\n+++ b/domain.py\n@@ -1,5 +1,5 @@\n def total(price, quantity):\n-    return price + quantity\n+    return price * quantity\n \n def average(values):\n-    return sum(values) / len(values)\n+    return sum(values) / len(values) if values else 0\ndiff --git a/main.py b/main.py\nindex 5b55e8c..9c87b0e 100644\n--- a/main.py\n+++ b/main.py\n@@ -1,13 +1,13 @@\n from fastapi import FastAPI, HTTPException\n-from pydantic import BaseModel\n+from pydantic import BaseModel, Field\n from domain import total, average\n from permissions import can_read\n \n app = FastAPI()\n \n class Quote(BaseModel):\n-    price: float\n-    quantity: int\n+    price: float = Field(ge=0)\n+    quantity: int = Field(gt=0)\n \n @app.post(\"/quote\")\n def quote(body: Quote):\ndiff --git a/permissions.py b/permissions.py\nindex c10cbac..08d5f26 100644\n--- a/permissions.py\n+++ b/permissions.py\n@@ -1,2 +1,2 @@\n def can_read(user_id, owner_id):\n-    return True\n+    return user_id == owner_id\n",
+        "changed_files": [
+          "domain.py",
+          "main.py",
+          "permissions.py"
+        ],
+        "summary": "Scripted engineer fixture response",
+        "version": 3
+      }
+    },
+    {
+      "id": 99,
+      "kind": "security",
+      "patch_hash": null,
+      "created_at": "2026-11-14T23:02:56.273310+00:00",
+      "content": {
+        "output": {
+          "summary": "Scripted security fixture response",
+          "findings": [],
+          "criteria": {
+            "Fix quote multiplication; require nonnegative prices and strictly positive quantities (422 otherwise); enforce document ownership (owner 7 only); return 0 for an empty average. Preserve all routes.": true
+          },
+          "recommendation": "review",
+          "residual_risks": [
+            "Scripted fixture demonstration; human review required"
+          ]
+        },
+        "context": {
+          "estimated_tokens": 1036,
+          "omitted": []
+        },
+        "model_calls": 1
+      }
+    },
+    {
+      "id": 100,
+      "kind": "security_results",
+      "patch_hash": "cece5ba87784054a6970d44b41f6c983bf6b6d97e2bd306de9b7961fdc1c27fe",
+      "created_at": "2026-11-14T23:03:00.232152+00:00",
+      "content": {
+        "passed": true,
+        "findings": [],
+        "scanners": [
+          {
+            "command": [
+              "bandit",
+              "-q",
+              "-f",
+              "json",
+              "-ll",
+              "domain.py",
+              "main.py",
+              "permissions.py"
+            ],
+            "exit_code": 0,
+            "stdout": "{\n  \"errors\": [],\n  \"generated_at\": \"2026-11-14T23:02:59Z\",\n  \"metrics\": {\n    \"./domain.py\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 4,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    },\n    \"./main.py\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 19,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    },\n    \"./permissions.py\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 2,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    },\n    \"_totals\": {\n      \"CONFIDENCE.HIGH\": 0,\n      \"CONFIDENCE.LOW\": 0,\n      \"CONFIDENCE.MEDIUM\": 0,\n      \"CONFIDENCE.UNDEFINED\": 0,\n      \"SEVERITY.HIGH\": 0,\n      \"SEVERITY.LOW\": 0,\n      \"SEVERITY.MEDIUM\": 0,\n      \"SEVERITY.UNDEFINED\": 0,\n      \"loc\": 25,\n      \"nosec\": 0,\n      \"skipped_tests\": 0\n    }\n  },\n  \"results\": []\n}",
+            "timed_out": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 101,
+      "kind": "tool",
+      "patch_hash": null,
+      "created_at": "2026-11-14T23:03:00.256005+00:00",
+      "content": {
+        "role": "tester",
+        "name": "write_test",
+        "path": "test_requirements.py",
+        "result": "{'generated': 'test_requirements.py'}"
+      }
+    },
+    {
+      "id": 102,
+      "kind": "tester",
+      "patch_hash": null,
+      "created_at": "2026-11-14T23:03:00.258855+00:00",
+      "content": {
+        "output": {
+          "summary": "Scripted tester fixture response",
+          "findings": [],
+          "criteria": {
+            "Fix quote multiplication; require nonnegative prices and strictly positive quantities (422 otherwise); enforce document ownership (owner 7 only); return 0 for an empty average. Preserve all routes.": true
+          },
+          "recommendation": "review",
+          "residual_risks": [
+            "Scripted fixture demonstration; human review required"
+          ]
+        },
+        "context": {
+          "estimated_tokens": 997,
+          "omitted": []
+        },
+        "model_calls": 1
+      }
+    },
+    {
+      "id": 103,
+      "kind": "generated_tests",
+      "patch_hash": "cece5ba87784054a6970d44b41f6c983bf6b6d97e2bd306de9b7961fdc1c27fe",
+      "created_at": "2026-11-14T23:03:00.260455+00:00",
+      "content": {
+        "test_requirements.py": "from fastapi.testclient import TestClient\nfrom main import app\n\nclient = TestClient(app)\ndef test_requirements():\n    assert client.post(\"/quote\", json={\"price\": 3.5,\"quantity\":4}).json() == {\"total\":14}\n    for qty in [0,-1]:\n        assert client.post(\"/quote\", json={\"price\":1,\"quantity\":qty}).status_code == 422\n    assert client.get(\"/documents/1?user_id=2\").status_code == 403\n    assert client.get(\"/documents/1?user_id=7\").status_code == 200\n    assert client.get(\"/stats\").json() == {\"average\":0}\n"
+      }
+    },
+    {
+      "id": 104,
+      "kind": "test_results",
+      "patch_hash": "cece5ba87784054a6970d44b41f6c983bf6b6d97e2bd306de9b7961fdc1c27fe",
+      "created_at": "2026-11-14T23:03:03.258766+00:00",
+      "content": {
+        "passed": true,
+        "command": [
+          "pytest",
+          "-q",
+          "-p",
+          "no:cacheprovider",
+          "--import-mode=importlib",
+          "tests",
+          "/validation"
+        ],
+        "exit_code": 0,
+        "stdout": "..                                                                       [100%]\n=============================== warnings summary ===============================\n../usr/local/lib/python3.12/site-packages/starlette/testclient.py:37\n  /usr/local/lib/python3.12/site-packages/starlette/testclient.py:37: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.\n    _PortalFactoryType = typing.Callable[[], typing.ContextManager[anyio.abc.BlockingPortal]]\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n2 passed, 1 warning in 0.27s\n",
+        "timed_out": false
+      }
+    },
+    {
+      "id": 105,
+      "kind": "verifier",
+      "patch_hash": null,
+      "created_at": "2026-11-14T23:03:03.278192+00:00",
+      "content": {
+        "output": {
+          "summary": "Scripted verifier fixture response",
+          "findings": [],
+          "criteria": {
+            "Fix quote multiplication; require nonnegative prices and strictly positive quantities (422 otherwise); enforce document ownership (owner 7 only); return 0 for an empty average. Preserve all routes.": true
+          },
+          "recommendation": "review",
+          "residual_risks": [
+            "Scripted fixture demonstration; human review required"
+          ]
+        },
+        "context": {
+          "estimated_tokens": 947,
+          "omitted": []
+        },
+        "model_calls": 1
+      }
+    },
+    {
+      "id": 106,
+      "kind": "final_report",
+      "patch_hash": "cece5ba87784054a6970d44b41f6c983bf6b6d97e2bd306de9b7961fdc1c27fe",
+      "created_at": "2026-11-14T23:03:03.279078+00:00",
+      "content": {
+        "summary": "Scripted verifier fixture response",
+        "findings": [],
+        "criteria": {
+          "Fix quote multiplication; require nonnegative prices and strictly positive quantities (422 otherwise); enforce document ownership (owner 7 only); return 0 for an empty average. Preserve all routes.": true
+        },
+        "recommendation": "review",
+        "residual_risks": [
+          "Scripted fixture demonstration; human review required"
+        ],
+        "patch_hash": "cece5ba87784054a6970d44b41f6c983bf6b6d97e2bd306de9b7961fdc1c27fe",
+        "base_commit": "ed1db52392bf31d4beb2a5e24c4c9d3e6561ef51",
+        "test_evidence": {
+          "passed": true,
+          "command": [
+            "pytest",
+            "-q",
+            "-p",
+            "no:cacheprovider",
+            "--import-mode=importlib",
+            "tests",
+            "/validation"
+          ],
+          "exit_code": 0,
+          "stdout": "..                                                                       [100%]\n=============================== warnings summary ===============================\n../usr/local/lib/python3.12/site-packages/starlette/testclient.py:37\n  /usr/local/lib/python3.12/site-packages/starlette/testclient.py:37: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.\n    _PortalFactoryType = typing.Callable[[], typing.ContextManager[anyio.abc.BlockingPortal]]\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n2 passed, 1 warning in 0.27s\n",
+          "timed_out": false
+        },
+        "patch_summary": "Scripted engineer fixture response",
+        "security_findings": [],
+        "human_review_requirements": [
+          "Review patch and generated tests",
+          "Verify deployment-specific authorization and dependencies"
+        ],
+        "evidence_mode": "scripted"
+      }
+    }
+  ]
+}

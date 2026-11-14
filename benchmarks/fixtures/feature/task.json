@@ -1,0 +1,9 @@
+{
+  "name": "feature",
+  "description": "Add GET /health returning {\"status\":\"ok\"} using a health_status() function in a new health.py module. Preserve existing routes.",
+  "affected_files": [
+    "main.py",
+    "health.py"
+  ],
+  "expected_success": "All independently maintained validation tests pass; no blocking scanner findings"
+}

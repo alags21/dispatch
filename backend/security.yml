@@ -1,0 +1,11 @@
+rules:
+  - id: unsafe-eval
+    languages: [python]
+    severity: ERROR
+    message: Dynamic eval is forbidden in engineering patches
+    pattern: eval(...)
+  - id: unsafe-shell
+    languages: [python]
+    severity: ERROR
+    message: Shell execution requires manual review
+    pattern: subprocess.$FUNC(..., shell=True, ...)

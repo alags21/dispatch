@@ -1,0 +1,8 @@
+{
+  "name": "edge",
+  "description": "Make average([]) return 0 while preserving arithmetic means for populated lists.",
+  "affected_files": [
+    "domain.py"
+  ],
+  "expected_success": "All independently maintained validation tests pass; no blocking scanner findings"
+}

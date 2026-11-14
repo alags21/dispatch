@@ -1,0 +1,8 @@
+{
+  "name": "authorization",
+  "description": "Ensure GET /documents/{id} permits the owner user_id=7 and denies any other user with HTTP 403. Put the ownership rule in permissions.py.",
+  "affected_files": [
+    "permissions.py"
+  ],
+  "expected_success": "All independently maintained validation tests pass; no blocking scanner findings"
+}

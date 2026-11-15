@@ -11,6 +11,7 @@ import tempfile
 import time
 from sqlalchemy import select
 from app.config import Settings
+from app.providers.store import ProviderStore
 from app.database.models import Base, Run, Invocation, Artifact
 from app.database.session import database
 from app.evaluation.gates import test_gate
@@ -25,15 +26,18 @@ prepare_module = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(prepare_module)
 
 
-def evaluate(policy, fixture, mode, repositories, directory):
+def evaluate(policy, fixture, mode, repositories, directory, provider_settings=None):
     task = json.loads(
         (ROOT / "benchmarks/fixtures" / fixture / "task.json").read_text()
     )
-    settings = Settings(
-        database_url=f"sqlite:///{directory}/bench.db",
-        runtime_dir=directory / "runtime",
-        repository_root=repositories,
-        worker_enabled=False,
+    base = provider_settings or Settings()
+    settings = base.model_copy(
+        update={
+            "database_url": f"sqlite:///{directory}/bench.db",
+            "runtime_dir": directory / "runtime",
+            "repository_root": repositories,
+            "worker_enabled": False,
+        }
     )
     settings.prepare()
     db_engine, sessions = database(settings.database_url)
@@ -123,7 +127,16 @@ def main():
     parser.add_argument("--repeats", type=int, default=1)
     parser.add_argument("--mode", choices=["scripted", "live"], default="scripted")
     parser.add_argument("--output", default=str(ROOT / "benchmarks/report.json"))
+    parser.add_argument(
+        "--provider-runtime",
+        help="Instance runtime directory containing saved UI provider settings",
+    )
     args = parser.parse_args()
+    provider_settings = (
+        ProviderStore(Settings(runtime_dir=Path(args.provider_runtime))).effective()
+        if args.provider_runtime
+        else None
+    )
     if args.repeats < 1:
         parser.error("repeats must be positive")
     results = []
@@ -143,7 +156,12 @@ def main():
                     directory = temp / f"{repeat}-{policy}-{fixture}"
                     directory.mkdir(mode=0o755)
                     result = evaluate(
-                        policy, fixture, args.mode, repositories, directory
+                        policy,
+                        fixture,
+                        args.mode,
+                        repositories,
+                        directory,
+                        provider_settings,
                     )
                     result["repeat"] = repeat + 1
                     results.append(result)

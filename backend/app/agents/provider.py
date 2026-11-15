@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 import json
-import time
+from urllib.parse import urlsplit
 from typing import Protocol
 import httpx
 from app.context.builder import tokens
@@ -22,6 +22,16 @@ class Provider(Protocol):
     def invoke(
         self, role: str, model: str, context: str, tools, schema: dict, metadata: dict
     ) -> ProviderResult: ...
+
+
+def output_limit(settings, amount):
+    # OpenAI's current chat API uses completion limits, including reasoning tokens.
+    field = (
+        "max_completion_tokens"
+        if urlsplit(settings.provider_url).hostname == "api.openai.com"
+        else "max_tokens"
+    )
+    return {field: amount}
 
 
 class OpenAIProvider:
@@ -67,7 +77,7 @@ class OpenAIProvider:
                 "model": model,
                 "messages": messages,
                 "tools": tool_specs(role),
-                "max_tokens": self.settings.max_output_tokens,
+                **output_limit(self.settings, self.settings.max_output_tokens),
                 "response_format": {"type": "json_object"},
             }
             response = self.client.post("chat/completions", json=payload)

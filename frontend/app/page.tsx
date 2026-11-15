@@ -7,7 +7,6 @@ import {
   GitPullRequest,
   Activity,
   Coins,
-  Zap,
   Search,
   ArrowUpRight,
   ShieldCheck,
@@ -64,9 +63,8 @@ export default function Dashboard() {
     <>
       <div className="page-heading">
         <div>
-          <div className="eyebrow">YOUR ENGINEERING CONTROL PLANE</div>
           <h1>Workspace overview</h1>
-          <p>From issue to reviewable patch. Every step, accounted for.</p>
+          <p>Run tasks, inspect changes, and review results.</p>
         </div>
         <Link className="button primary" href="/new">
           <Plus size={17} />
@@ -116,23 +114,11 @@ export default function Dashboard() {
           </article>
         ))}
       </section>
-      <section className="intro-banner">
-        <div className="banner-icon">
-          <Zap size={22} />
-        </div>
-        <div>
-          <h3>A purpose-built team. A verified result.</h3>
-          <p>Planner → Engineer → Security → Tester → Verifier</p>
-        </div>
-        <span className="banner-tag">
-          5 SPECIALIZED AGENTS <ArrowUpRight size={14} />
-        </span>
-      </section>
       <section className="panel">
         <div className="panel-heading">
           <div>
             <h2>
-              Workflow runs <span className="count">{runs.length}</span>
+              Recent runs <span className="count">{runs.length}</span>
             </h2>
             <p>Track execution, inspect evidence, and review changes.</p>
           </div>
@@ -200,8 +186,15 @@ export default function Dashboard() {
                     </span>
                   </td>
                   <td className="mono">{duration(r)}</td>
-                  <td className="mono">
-                    {r.mode === "scripted" ? "No API usage" : money(r.cost)}
+                  <td
+                    className="mono"
+                    title={
+                      r.mode === "scripted"
+                        ? "Scripted demonstration: no API usage"
+                        : "Estimated API cost"
+                    }
+                  >
+                    {r.mode === "scripted" ? "—" : money(r.cost)}
                   </td>
                   <td className="muted nowrap">{date(r.created_at)}</td>
                   <td>
@@ -220,9 +213,7 @@ export default function Dashboard() {
         </div>
         {!filtered.length && (
           <Empty
-            title={
-              loading ? "Loading workflows…" : "Your next patch starts here"
-            }
+            title={loading ? "Loading workflows…" : "No workflows yet"}
             body={
               query
                 ? "No workflows match your search."
@@ -239,30 +230,13 @@ export default function Dashboard() {
           </span>
         </div>
       </section>
-      <div className="bottom-grid">
-        <section className="mini-card">
-          <ShieldCheck size={21} />
-          <div>
-            <h3>Quality gates are mandatory</h3>
-            <p>
-              Security and tests approve a specific patch version. Any change
-              invalidates prior approvals.
-            </p>
-          </div>
-        </section>
-        <section className="mini-card">
-          <Coins size={21} />
-          <div>
-            <h3>Transparent by design</h3>
-            <p>
-              {metrics
-                ? `${metrics.scripted_runs} scripted · ${metrics.live_runs} live workflows. `
-                : ""}
-              Scripted demonstrations are labeled separately from real model
-              execution.
-            </p>
-          </div>
-        </section>
+      <div className="workspace-meta">
+        <span>
+          {metrics
+            ? `${metrics.scripted_runs} scripted / ${metrics.live_runs} live runs`
+            : ""}
+        </span>
+        <span>Completed patches require human review.</span>
       </div>
     </>
   );

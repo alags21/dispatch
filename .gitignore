@@ -19,3 +19,8 @@ test-results/
 demo/repos/
 
 *.egg-info/
+
+# Protect provider credentials even when an operator chooses a custom runtime folder.
+**/providers/master.key
+**/providers/settings.enc
+**/providers/run-*.enc

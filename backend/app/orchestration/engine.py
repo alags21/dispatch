@@ -4,7 +4,9 @@ import json
 from pathlib import Path
 import time
 from sqlalchemy import select
-from app.agents.provider import OpenAIProvider, ScriptedProvider
+from app.agents.provider import ScriptedProvider
+from app.providers.service import make_provider
+from app.providers.store import ProviderStore
 from app.context.builder import build_context
 from app.database.models import Artifact, Event, Invocation, Run, now
 from app.evaluation.gates import security_gate, test_gate
@@ -74,6 +76,7 @@ class Engine:
                 record = db.get(Run, run.id)
                 record.outcome = "Interrupted execution: mandatory gates must run again in a new run"
                 db.commit()
+            ProviderStore(self.settings).forget_run(run.id)
         return len(interrupted)
 
     def execute(self, run_id):
@@ -86,6 +89,9 @@ class Engine:
             db.commit()
             spec = {c.name: getattr(r, c.name) for c in Run.__table__.columns}
         workspace = None
+        provider = None
+        execution_settings = self.settings
+        provider_store = ProviderStore(self.settings)
 
         def check():
             with self.sessions() as db:
@@ -139,8 +145,17 @@ class Engine:
                 db.get(Run, run_id).base_commit = base
                 db.commit()
             tools = Tools(workspace, self.sandbox, validation, tick, audit)
+            if spec["mode"] == "live":
+                with self.sessions() as db:
+                    pinned = (
+                        db.scalar(
+                            select(Artifact.id).where(Artifact.run_id == run_id, Artifact.kind == "provider")
+                        )
+                        is not None
+                    )
+                execution_settings = provider_store.for_run(run_id, require_snapshot=pinned)
             provider = self.provider_override or (
-                ScriptedProvider() if spec["mode"] == "scripted" else OpenAIProvider(self.settings)
+                ScriptedProvider() if spec["mode"] == "scripted" else make_provider(execution_settings)
             )
             plan, feedback, failure_class = {}, {}, None
             attempt = 0
@@ -229,7 +244,7 @@ class Engine:
                 model = (
                     "scripted-fixture-oracle"
                     if spec["mode"] == "scripted"
-                    else getattr(self.settings, f"model_{decision.tier}")
+                    else getattr(execution_settings, f"model_{decision.tier}")
                 )
                 if not model:
                     raise ValueError(f"No model configured for tier {decision.tier}")
@@ -447,14 +462,17 @@ class Engine:
             target = State.CANCELLED if isinstance(exc, Cancelled) else State.FAILED
             # Do not return provider headers or credentials in persisted error messages.
             message = str(exc)[:2000]
-            if self.settings.api_key:
-                message = message.replace(self.settings.api_key, "[redacted]")
+            if execution_settings.api_key:
+                message = message.replace(execution_settings.api_key, "[redacted]")
             with self.sessions() as db:
                 run = db.get(Run, run_id)
                 run.outcome = message
                 db.commit()
             self.transition(run_id, target, {"failure_class": type(exc).__name__, "message": message})
         finally:
+            if provider is not self.provider_override and getattr(provider, "client", None) is not None:
+                provider.client.close()
+            provider_store.forget_run(run_id)
             # Patches/logs/tests live in the DB. Discard code copies on success/cancel; retain failed workspaces for diagnosis.
             with self.sessions() as db:
                 status = db.get(Run, run_id).status

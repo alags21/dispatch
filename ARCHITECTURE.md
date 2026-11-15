@@ -43,3 +43,11 @@ The benchmark harness runs each fixture/policy/repeat in a fresh database and di
 ## Extension points
 
 Provider protocol supports additional model adapters; routing and pricing are isolated pure modules. A replacement sandbox can implement the same command/result contract. A future distributed scheduler can claim database jobs transactionally without changing agent roles. Organization authorization must be enforced at API access boundaries before adding tenants. Learned routing requires measured live outcomes and a separately validated policy; no learning is claimed in this version.
+
+## Provider onboarding and native Anthropic
+
+The provider settings API validates endpoint, model IDs and finite nonnegative prices before saving. ProviderStore encrypts a single instance profile in private filesystem storage and pins a separate encrypted snapshot for each live job. The API returns only public connection/model metadata. The worker loads the pinned snapshot and uses its provider type, key, models and prices for all invocations. Terminal cleanup removes the job snapshot.
+
+AnthropicProvider implements the native Messages API, translates role tools into input_schema definitions, consumes tool_use content, appends tool_result responses, and uses a submit_result tool for validated final outputs. It shares the same role restrictions, context/budget checks, telemetry callback and deterministic gates as the compatible adapter. Direct OpenAI requests use max_completion_tokens; other compatible endpoints use max_tokens. Both transport protocols are tested with synthetic HTTP responses, including a complete native-format workflow using real Docker validation. Live-provider execution remains unverified without credentials.
+
+The frontend self-hosts IBM Plex Sans/Mono font assets from installed packages, uses dark neutral surfaces and larger type, and has a provider page with a simple single-model default plus optional tiered models. No external font request is required at build or runtime.

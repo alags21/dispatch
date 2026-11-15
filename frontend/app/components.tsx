@@ -9,56 +9,54 @@ import {
   GitBranch,
   KeyRound,
   ArrowUpRight,
+  SlidersHorizontal,
 } from "lucide-react";
+
 export function Shell({ children }: { children: React.ReactNode }) {
   const path = usePathname();
-  const [settings, setSettings] = useState(false);
+  const [access, setAccess] = useState(false);
   const [token, setToken] = useState("");
   return (
     <div className="app">
       <aside>
-        <Link className="brand" href="/">
+        <Link className="brand" href="/" aria-label="Dispatch overview">
           <span className="brand-mark">
-            <Boxes size={23} />
+            <ArrowUpRight size={26} />
           </span>
           Dispatch<span className="version">BETA</span>
         </Link>
         <div className="workspace">
-          <span className="workspace-avatar">D</span>
-          <div>
-            Engineering workspace<small>Personal · MVP</small>
-          </div>
-          <span className="workspace-dot" />
+          <GitBranch size={15} />
+          <span>Local workspace</span>
         </div>
         <div className="nav-label">WORKSPACE</div>
-        <nav>
+        <nav aria-label="Main navigation">
           <Link className={path === "/" ? "active" : ""} href="/">
-            <LayoutDashboard size={17} />
+            <LayoutDashboard size={18} />
             Overview
           </Link>
           <Link className={path === "/new" ? "active" : ""} href="/new">
-            <Plus size={17} />
+            <Plus size={18} />
             New workflow
           </Link>
+          <Link
+            className={path === "/settings" ? "active" : ""}
+            href="/settings"
+          >
+            <SlidersHorizontal size={18} />
+            AI provider
+          </Link>
         </nav>
-        <div className="sidebar-note">
-          <GitBranch size={19} />
-          <strong>Evidence before approval.</strong>
-          <p>
-            Every patch passes security and testing gates before human review.
-          </p>
-          <span>
-            NO AUTOMATIC MERGES <ArrowUpRight size={12} />
-          </span>
-        </div>
         <button
           className="settings-button"
-          onClick={() => setSettings(!settings)}
+          aria-label="Backend access"
+          aria-expanded={access}
+          onClick={() => setAccess(!access)}
         >
-          <KeyRound size={16} />
-          API connection
+          <KeyRound size={17} />
+          Backend access
         </button>
-        {settings && (
+        {access && (
           <form
             className="token-form"
             onSubmit={(e) => {
@@ -67,7 +65,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
               location.reload();
             }}
           >
-            <label htmlFor="token">Backend bearer token</label>
+            <label htmlFor="token">Dispatch access token</label>
             <input
               id="token"
               type="password"
@@ -78,35 +76,37 @@ export function Shell({ children }: { children: React.ReactNode }) {
             <button className="button" type="submit">
               Save for this session
             </button>
+            <p>
+              Only needed if this Dispatch instance requires an access token.
+              Configure model keys under AI provider.
+            </p>
           </form>
         )}
         <div className="sidebar-footer">
-          <span className="avatar">D</span>
-          <div>
-            Dispatch<small>Local development</small>
-          </div>
+          <GitBranch size={14} />
+          <span>Local instance</span>
+          <small>v0.1.0</small>
         </div>
       </aside>
       <div className="main-shell">
         <header>
           <span>
-            Workspace <span className="slash">/</span>{" "}
+            Workspace <span className="slash">/</span>
             <strong>
               {path === "/"
                 ? "Overview"
                 : path === "/new"
                   ? "New workflow"
-                  : "Workflow details"}
+                  : path === "/settings"
+                    ? "AI provider"
+                    : "Workflow details"}
             </strong>
           </span>
-          <span className="header-label">
-            <span /> Deterministic orchestration
-          </span>
+          <span className="header-label">Dispatch / v0.1</span>
         </header>
         <main>{children}</main>
         <footer>
-          Dispatch <span>Build with intent. Verify with evidence.</span>
-          <span>v0.1.0</span>
+          Dispatch<span>Local engineering workspace</span>
         </footer>
       </div>
     </div>
@@ -123,7 +123,7 @@ export function Badge({ status }: { status: string }) {
 export function Empty({ title, body }: { title: string; body: string }) {
   return (
     <div className="empty">
-      <Boxes size={30} />
+      <Boxes size={29} />
       <h3>{title}</h3>
       <p>{body}</p>
     </div>

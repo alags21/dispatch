@@ -13,3 +13,13 @@ Live mode requires API key, all tier model IDs, and prices for all three. Use an
 Prices are configuration, not fetched market data. Estimated cost is not an invoice. Scripted usage is absent and shown as 'No API usage'. Per-agent summaries and invocation usage sources expose partial/missing data.
 
 To enable Semgrep, build `backend/semgrep.Dockerfile` as a separate sandbox image, set `FORGEOPS_SANDBOX_IMAGE` to it and `FORGEOPS_SEMGREP_ENABLED=true`. Its local Python rules detect eval and shell=True; rules are intentionally small. The default tested image uses Bandit.
+
+## Managing a provider through the dashboard
+
+AI provider supports native Anthropic and OpenAI-compatible endpoints. Saving applies without restarting the backend and affects new runs. Created live jobs have an encrypted private snapshot; changing or removing the active profile does not rewrite queued/active jobs. Public run artifacts record provider kind, endpoint and selected model IDs, never keys. Environment configuration remains an optional fallback, with UI settings taking precedence.
+
+Model IDs are discovered where supported and can be entered manually. Configure actual prices to make budget estimates meaningful. Cache/batch charges and provider invoices may differ from standard configured input/output rates. A successful connection check proves authentication and tool calling for one model; it is not end-to-end quality evidence. Credentials are not available in this development session, so live validation is not claimed.
+
+Profiles live under runtime/providers. Keep the master.key with encrypted settings in secured backups. Do not commit either. If encrypted settings are corrupted, enter a fresh key and save a complete profile; to recover old encrypted snapshots, restore the matching master key. Interrupted jobs fail closed and their private snapshot is removed during recovery.
+
+For the CLI evaluator, `--provider-runtime <instance runtime directory>` loads that instance's saved profile once before creating evaluation workspaces. Without it, benchmark model configuration comes from the environment.

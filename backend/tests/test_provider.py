@@ -4,7 +4,15 @@ from app.agents.provider import OpenAIProvider
 from app.config import Settings
 
 
-def test_openai_compatible_structured_tool_path_and_usage():
+@pytest.mark.parametrize(
+    "provider_url,token_field",
+    [
+        ("https://api.openai.com/v1", "max_completion_tokens"),
+        ("https://openrouter.ai/api/v1", "max_tokens"),
+        ("http://127.0.0.1:11434/v1", "max_tokens"),
+    ],
+)
+def test_openai_compatible_structured_tool_path_and_usage(provider_url, token_field):
     calls = []
     usage = []
 
@@ -13,6 +21,12 @@ def test_openai_compatible_structured_tool_path_and_usage():
 
         payload = json.loads(request.content)
         calls.append(payload)
+        assert payload[token_field] == 3000
+        assert (
+            ("max_tokens" not in payload)
+            if token_field == "max_completion_tokens"
+            else ("max_completion_tokens" not in payload)
+        )
         message = (
             {
                 "role": "assistant",
@@ -36,7 +50,9 @@ def test_openai_compatible_structured_tool_path_and_usage():
         )
 
     settings = Settings(
-        api_key="not-a-real-key", pricing_json='{"test-model":{"input_per_million":1,"output_per_million":2}}'
+        api_key="not-a-real-key",
+        provider_url=provider_url,
+        pricing_json='{"test-model":{"input_per_million":1,"output_per_million":2}}',
     )
     client = httpx.Client(transport=httpx.MockTransport(handle), base_url="https://example.invalid/v1/")
 

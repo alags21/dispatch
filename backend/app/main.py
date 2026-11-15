@@ -3,8 +3,14 @@ import json
 import logging
 from pathlib import Path
 import secrets
+import httpx
 from fastapi import FastAPI, Depends, HTTPException, Header
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
+from app.providers.configuration import ProviderSetup, Credentials
+from app.providers.store import ProviderStore
+from app.providers.service import check_connection, discover_models
 from sqlalchemy import select
 from app.config import Settings
 from app.database.models import Artifact, Event, Invocation, Run, now
@@ -35,6 +41,7 @@ def create_app(settings=None, engine_override=None):
     db_engine, sessions = database(settings.database_url)
     workflow = engine_override or Engine(settings, sessions)
     worker = Worker(workflow)
+    providers = ProviderStore(settings)
 
     @asynccontextmanager
     async def lifespan(app):
@@ -65,6 +72,66 @@ def create_app(settings=None, engine_override=None):
             authorization or "", "Bearer " + settings.api_token
         ):
             raise HTTPException(401, "Valid bearer token required")
+
+    @app.exception_handler(RequestValidationError)
+    async def validation_error(_request, exc):
+        # Validation errors must never echo a submitted provider key.
+        return JSONResponse(
+            status_code=422,
+            content={
+                "detail": [
+                    {"loc": list(error["loc"]), "msg": error["msg"], "type": error["type"]}
+                    for error in exc.errors()
+                ]
+            },
+        )
+
+    def provider_action(action):
+        try:
+            return action()
+        except httpx.HTTPStatusError as exc:
+            code = exc.response.status_code
+            hint = (
+                "Check the API key and account permissions"
+                if code in {401, 403}
+                else "Check the endpoint, model ID, and provider limits"
+            )
+            raise HTTPException(502, f"Provider returned HTTP {code}. {hint}.") from None
+        except httpx.TimeoutException:
+            raise HTTPException(504, "Provider request timed out") from None
+        except httpx.RequestError:
+            raise HTTPException(502, "Unable to reach the provider endpoint") from None
+        except ValueError as exc:
+            raise HTTPException(400, str(exc)) from None
+        except (KeyError, IndexError, TypeError, AttributeError):
+            raise HTTPException(502, "Provider returned an unsupported response format") from None
+        except OSError:
+            raise HTTPException(503, "Provider settings storage is unavailable") from None
+
+    @app.get("/api/provider", dependencies=[Depends(authorize)])
+    def provider_configuration():
+        return provider_action(providers.view)
+
+    @app.post("/api/provider", dependencies=[Depends(authorize)])
+    def save_provider(body: ProviderSetup):
+        return provider_action(lambda: providers.save(body))
+
+    @app.post("/api/provider/reset", dependencies=[Depends(authorize)])
+    def reset_provider():
+        return provider_action(providers.reset)
+
+    @app.post("/api/provider/models", dependencies=[Depends(authorize)])
+    def provider_models(body: Credentials):
+        return provider_action(
+            lambda: {"models": discover_models(body.kind, body.base_url, providers.credential_values(body))}
+        )
+
+    @app.post("/api/provider/test", dependencies=[Depends(authorize)])
+    def test_provider():
+        view = provider_action(providers.view)
+        if not view["configured"]:
+            raise HTTPException(422, "Save a complete provider configuration before testing")
+        return provider_action(lambda: check_connection(providers.ready_settings()))
 
     def get_run(db, run_id):
         run = db.get(Run, run_id)
@@ -97,27 +164,39 @@ def create_app(settings=None, engine_override=None):
             git(source, "rev-parse", "HEAD")
         except Exception:
             raise HTTPException(422, "Repository must have an accessible Git HEAD commit")
+        live_settings = None
         if body.mode == "live":
-            if not settings.api_key or not all(
-                [settings.model_small, settings.model_medium, settings.model_large]
-            ):
-                raise HTTPException(422, "Live mode requires API key and all three configured model IDs")
-            from app.routing.telemetry import estimated_cost
-
             try:
-                if any(
-                    estimated_cost(settings.pricing_json, model, 1, 1) is None
-                    for model in [settings.model_small, settings.model_medium, settings.model_large]
-                ):
-                    raise ValueError()
-            except (ValueError, KeyError, TypeError):
-                raise HTTPException(422, "Live mode requires valid pricing for every configured model")
+                live_settings = providers.ready_settings()
+            except ValueError as exc:
+                raise HTTPException(422, str(exc)) from None
+            except OSError:
+                raise HTTPException(503, "Provider settings storage is unavailable") from None
         with sessions() as db:
             run = Run(**{**body.model_dump(), "repository": str(source)})
             db.add(run)
             db.flush()
             db.add(Event(run_id=run.id, state="CREATED", detail={"mode": body.mode}))
-            db.commit()
+            if live_settings:
+                provider_action(lambda: providers.pin_run(run.id, live_settings))
+                db.add(
+                    Artifact(
+                        run_id=run.id,
+                        kind="provider",
+                        content={
+                            "kind": live_settings.provider_kind,
+                            "base_url": live_settings.provider_url,
+                            "models": {
+                                t: getattr(live_settings, f"model_{t}") for t in ["small", "medium", "large"]
+                            },
+                        },
+                    )
+                )
+            try:
+                db.commit()
+            except Exception:
+                providers.forget_run(run.id)
+                raise
             return RunView.model_validate(run)
 
     @app.get("/api/runs", response_model=list[RunView], dependencies=[Depends(authorize)])
@@ -183,13 +262,16 @@ def create_app(settings=None, engine_override=None):
 
     @app.get("/api/configuration", dependencies=[Depends(authorize)])
     def configuration():
-        return {"repository_root": str(settings.repository_root.resolve())}
+        return {
+            "repository_root": str(settings.repository_root.resolve()),
+            "provider": provider_action(providers.view),
+        }
 
     @app.get("/api/models", dependencies=[Depends(authorize)])
     def models():
+        current = provider_action(providers.effective)
         return [
-            {"tier": t, "model": getattr(settings, f"model_{t}") or None}
-            for t in ["small", "medium", "large"]
+            {"tier": t, "model": getattr(current, f"model_{t}") or None} for t in ["small", "medium", "large"]
         ]
 
     @app.get("/api/policies", dependencies=[Depends(authorize)])

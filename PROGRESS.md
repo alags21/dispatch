@@ -40,7 +40,7 @@
 
 ## Verified evidence
 
-- Backend: `FORGEOPS_DOCKER_TESTS=1 FORGEOPS_SEMGREP_TESTS=1 .venv/bin/pytest backend/tests -q` → **36 passed**, one upstream Starlette/httpx deprecation warning.
+- Backend: `FORGEOPS_DOCKER_TESTS=1 FORGEOPS_SEMGREP_TESTS=1 .venv/bin/pytest backend/tests -q` → **51 passed**, one upstream Starlette/httpx deprecation warning.
 - Frontend: `npm run typecheck`, `npm run build`, `CHROMIUM_PATH=/usr/bin/chromium npm run test:e2e` → pass.
 - Production services: actual Compose images built and started; browser-created run reached READY_FOR_REVIEW after two repairs.
 - Migrations: fresh-database `upgrade head`, `downgrade base`, `upgrade head` → pass.
@@ -53,7 +53,7 @@
 
 **GitHub:** The owner created `alags21/dispatch` and granted access. The tested project and Dispatch UI were pushed to its main branch. Repository creation is no longer a blocker. GitHub Actions is configured and runs on pushes; remote CI results should be checked separately from the recorded local verification.
 
-**Live models:** Set FORGEOPS_API_KEY, all three model IDs, current prices, and the compatible endpoint. Then submit a live run and run `benchmarks/run.py --mode live`. Until that happens, transport contract tests establish adapter mechanics only, not provider compatibility or autonomous task quality.
+**Live models:** Configure Anthropic or an OpenAI-compatible endpoint in **AI provider**, save current model prices and run the connection check. Then submit a live workflow. Live benchmarks can load the same profile with `benchmarks/run.py --mode live --provider-runtime backend/runtime`. Until owner-supplied credentials are tested, synthetic transport contracts establish adapter mechanics only, not real-provider compatibility or autonomous task quality.
 
 ## Operational limits
 
@@ -70,3 +70,14 @@ Single operator and one serial worker; no public hosting or multitenant security
 - [x] Explain a missing production build before trying to start the standalone server.
 - [x] Reproduce the exact failure with Node 24.15.0, an empty ancestor package.json, an unrelated pnpm lockfile, and ancestor node_modules. The fixed production build and standalone HTTP startup pass without modifying the ancestor files.
 - [x] Frontend type checking, the build-isolation regression, the full browser workflow, startup error handling, and CI configuration validation pass. The build-isolation regression is included in CI.
+
+## Dark UI and convenient provider setup
+
+- [x] Dark charcoal surfaces, self-hosted IBM Plex Sans/Mono, 16px body / 15px row type, simplified shell and readable forms/results.
+- [x] AI provider settings: native Anthropic or compatible endpoint, private key entry, model discovery, one-model default or separate routing tiers, current-rate input and connection test.
+- [x] Encrypted backend key storage, masked responses, validation-error redaction, authenticated routes, immutable queued-run snapshots and terminal cleanup.
+- [x] Native Anthropic tool loop and structured final responses, direct OpenAI completion-token compatibility, and saved-profile support in the benchmark CLI.
+- [x] Synthetic native-API integration through all five roles with actual Docker gates; this is explicitly not a real-provider performance result.
+- [x] Final verification: 51 backend tests (including Docker/Semgrep), 3 browser tests, production build/type checking, build-isolation regression, both application images, static checks and documentation review.
+- [x] Provider onboarding and dark interface prepared for publication on the existing GitHub main branch.
+- [ ] Real-provider workflow with owner-supplied credentials: still external and not claimed.

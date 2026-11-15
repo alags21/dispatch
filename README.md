@@ -11,6 +11,7 @@ Dispatch turns a software task and a local Git repository into a reviewable patc
 - Planner, engineer, read-only security reviewer, independent tester, and final verifier.
 - Disposable Git snapshots; restricted Docker execution with no network or host shell fallback.
 - Bounded repairs, cancellation, tool/time/cost budgets, patch-bound approvals and safe interruption handling.
+- UI provider setup with native Anthropic and OpenAI-compatible adapters, encrypted local keys, model discovery and a connection check.
 - Adaptive small/medium/large routing with configurable IDs and prices; retry-aware escalation and a security tier floor.
 - Stage-specific prioritized context, explicit truncation, protected requirements/error evidence, and usage telemetry.
 - SQLite histories, versioned diffs, generated tests, scanner logs and final review reports.
@@ -97,13 +98,46 @@ The demo submits an actual HTTP request, waits for the database worker, and asse
 
 Evidence is saved to `demo/evidence.json`. Scripted agent responses use **known patches**. Docker scanners, tests, repair orchestration, persistence and UI are real. This demonstrates the system's mechanics; it is not evidence of autonomous model task-solving ability.
 
-## Real model mode
+## Connect your own AI provider
 
-Copy `.env.example` to `backend/.env` for host startup. Set `FORGEOPS_API_KEY`, your provider URL, three current model IDs, and `FORGEOPS_PRICING_JSON` keyed by those IDs. Each pricing entry contains numeric `input_per_million` and `output_per_million` USD rates. No model names or prices are hardcoded. Set `FORGEOPS_REPOSITORY_ROOT` to a directory containing the repositories you explicitly want Dispatch to access. Create a run in **Live model execution** mode with its actual requirements.
+Open **AI provider** in the dashboard. No environment-file editing is required for normal setup.
 
-The OpenAI-compatible chat-completions adapter supports structured function tools and validated JSON outputs. The provider must support these features. Its transport/tool loop is tested with `httpx.MockTransport`. A real-provider execution was **not performed** in this delivery because model credentials are unavailable. Validate against your provider before relying on it.
+1. Choose **Anthropic / Claude** or **OpenAI-compatible API**. Native Claude connects directly to Anthropic; use an Anthropic Console API key, not a Claude subscription or Claude Code login token. For a compatible gateway, enter its base URL and its own API key.
+2. Enter the key and click **Load available models**. If the provider does not support model discovery, enter a model ID manually.
+3. Select a model and enter its current input/output USD rates per million tokens. By default one model serves all five agents and all routing tiers. Enable **Use different models for each tier** to configure separate small/medium/large models. Provider-reported prices are used when the model catalog includes them; otherwise enter rates from your provider. Zero rates are intended only for genuinely free models.
+4. **Save provider**, then **Test connection**. The test makes one short, billable request and verifies authentication/tool calling. It does not certify the whole engineering workflow.
+5. Click **New live workflow**, select a prepared local repository, and start with a small task. Inspect actual invocations, tool evidence, scans, tests and the final patch. Docker isolation must be available for workflow execution.
 
-Set `FORGEOPS_API_TOKEN` before exposing the backend beyond loopback. Use **API connection** in the dashboard to store the token in the current browser session. Do not put credentials into repository files or task descriptions.
+API keys are encrypted in instance-local backend storage, protected by private filesystem permissions, and never returned in settings responses. The form clears the key after saving. Saved settings apply to new runs; queued runs keep an encrypted snapshot, so editing settings does not change an existing run's provider. Removing saved settings restores environment configuration if present. See [security](docs/SECURITY.md) for the storage and backup boundary.
+
+**Verification limit:** native Anthropic and OpenAI-compatible adapters are transport-tested with synthetic HTTP responses. A native-format run through all five roles and real Docker gates passes in integration tests. No live-provider workflow or live model-quality benchmark has been executed in this delivery because provider credentials are unavailable. The first run with your own key is still the real-provider validation step.
+
+Advanced deployments can still use `backend/.env` and the legacy `FORGEOPS_` variables. Set `FORGEOPS_PROVIDER_KIND` to `anthropic` or `openai`, the corresponding base URL, API key, all tier IDs, and `FORGEOPS_PRICING_JSON`. UI-saved settings take precedence. Internal environment/image names remain compatible with the original ForgeOps implementation.
+
+Set `FORGEOPS_API_TOKEN` before exposing this instance beyond loopback. **Backend access** in the dashboard stores that Dispatch access token for the current browser session; it is separate from your model-provider key.
+
+To run live benchmarks using a profile saved by a host-started backend, use:
+
+```sh
+.venv/bin/python benchmarks/run.py --mode live --provider-runtime backend/runtime
+```
+
+Pass your actual instance runtime directory for Compose/custom deployments. Benchmark results use an immutable copy of that profile for the evaluation process. Live calls incur charges with your provider.
+
+## Updating an existing installation
+
+Stop the backend and frontend in their own terminals. From the repository root:
+
+```sh
+git pull --ff-only
+source .venv/bin/activate
+uv pip install -c backend/requirements.lock -e './backend[test]'
+cd frontend
+npm ci
+npm run build
+```
+
+If uv is not installed, use `python -m pip install -c backend/requirements.lock -e './backend[test]'` from the repository root instead. Restart Uvicorn from backend on port 8010 and `npm run start` from frontend on port 3000 in separate terminals. Then open **AI provider**. The new cryptography/font dependencies require the installation steps above.
 
 ## Routing and context
 

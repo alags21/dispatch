@@ -10,6 +10,7 @@ class Settings(BaseSettings):
     sandbox_image: str = "forgeops-sandbox:local"
     worker_enabled: bool = True
     worker_poll_seconds: float = 0.5
+    provider_kind: str = "openai"
     provider_url: str = "https://api.openai.com/v1"
     api_key: str = ""
     model_small: str = ""

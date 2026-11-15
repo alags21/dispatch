@@ -13,3 +13,13 @@ Bandit scans changed Python files and blocks medium/high findings or scanner err
 Generated tests are separate, visible artifacts. Repository test code is untrusted and can be deceptive. A run's review-ready recommendation is not proof that a malicious repository cannot game its own tests. The benchmark runner executes additional evaluator-maintained tests withheld from agent context. Always inspect the diff, tests, logs and final report.
 
 Known credential filenames are blocked; content-based secret discovery is incomplete. Do not submit repositories containing secrets. No workflow pushes, publishes, deploys or merges source code.
+
+## Provider settings and credentials
+
+Provider keys entered in AI provider are sent to the local backend, never stored in browser local/session storage, and cleared from the form after saving. Settings responses return only a key-present flag. Validation errors omit submitted input values. Provider HTTP errors are summarized without returning provider response bodies, and run errors redact the active run key.
+
+Settings and queued-run provider snapshots use authenticated Fernet encryption under runtime/providers with directory mode 0700 and file mode 0600. The master.key file is stored beside the encrypted configuration and is restricted to the backend OS account. This protects accidental exports of isolated ciphertext; it does not protect against someone who controls that account or copies both the key and encrypted settings. Backups must protect the entire runtime directory and retain its matching master key. Agent sandboxes never mount this directory. Per-run snapshots are deleted at terminal completion or interruption recovery.
+
+A blank key field retains the saved key only when provider kind and endpoint are unchanged. Changing endpoint requires explicitly entering a new key. Native Anthropic is restricted to its official Messages API endpoint; compatible custom endpoints require HTTPS except loopback HTTP for local providers. Redirect following is disabled by the HTTP client default. Only the instance operator should access provider settings. Existing optional bearer authentication protects these routes; this remains a single-operator application.
+
+The connection test uses one short generation request with a forced tool call. It is billable separately from workflow run metrics; the UI returns its usage/cost estimate when available. Model discovery normally uses the provider's models endpoint. External model metadata is not proof of a model's ability to complete engineering tasks. Live workflow validation still matters.

@@ -7,6 +7,7 @@ import { api, Run } from "../lib";
 import { ErrorBox } from "../components";
 export default function Create() {
   const router = useRouter();
+  const [providerReady, setProviderReady] = useState<boolean | null>(null);
   const [repository, setRepository] = useState(""),
     [task, setTask] = useState(
       "Fix quote multiplication; require nonnegative prices and strictly positive quantities (422 otherwise); enforce document ownership (owner 7 only); return 0 for an empty average. Preserve all routes.",
@@ -19,8 +20,21 @@ export default function Create() {
     [error, setError] = useState(""),
     [fixture, setFixture] = useState("demo");
   useEffect(() => {
-    api<{ repository_root: string }>("/configuration")
-      .then((c) => setRepository(`${c.repository_root}/demo`))
+    api<{ repository_root: string; provider?: { configured: boolean } }>(
+      "/configuration",
+    )
+      .then((c) => {
+        setRepository(`${c.repository_root}/demo`);
+        setProviderReady(c.provider?.configured ?? false);
+        const requestedMode = new URLSearchParams(window.location.search).get(
+          "mode",
+        );
+        if (
+          requestedMode === "live" ||
+          (c.provider?.configured && requestedMode !== "scripted")
+        )
+          setMode("live");
+      })
       .catch(() => {});
   }, []);
   async function submit(e: React.FormEvent) {
@@ -54,11 +68,17 @@ export default function Create() {
       </Link>
       <div className="page-heading">
         <div>
-          <div className="eyebrow">START SOMETHING USEFUL</div>
           <h1>New workflow</h1>
-          <p>Describe the change. Let the workflow build the evidence.</p>
+          <p>Choose a repository and describe the change you want.</p>
         </div>
       </div>
+      {providerReady === false && (
+        <div className="notice">
+          Live execution needs an AI provider.{" "}
+          <Link href="/settings">Configure your provider</Link> to use your own
+          models. Scripted demos are available without a key.
+        </div>
+      )}
       <div className="create-grid">
         <form onSubmit={submit} className="panel form-panel">
           {error && <ErrorBox message={error} />}
@@ -95,7 +115,12 @@ export default function Create() {
                 onChange={(e) => setMode(e.target.value)}
               >
                 <option value="scripted">Scripted fixture demonstration</option>
-                <option value="live">Live model execution</option>
+                <option value="live" disabled={providerReady !== true}>
+                  Live model execution
+                  {providerReady === false
+                    ? " — configure a provider first"
+                    : ""}
+                </option>
               </select>
             </div>
             <div>
@@ -168,7 +193,11 @@ export default function Create() {
             <Link className="button" href="/">
               Cancel
             </Link>
-            <button disabled={busy} className="button primary" type="submit">
+            <button
+              disabled={busy || (mode === "live" && providerReady !== true)}
+              className="button primary"
+              type="submit"
+            >
               {busy ? "Creating workflow…" : "Start workflow"}
               <ArrowRight size={16} />
             </button>
@@ -176,7 +205,7 @@ export default function Create() {
         </form>
         <section className="create-help">
           <ShieldCheck size={28} />
-          <h2>Built for review.</h2>
+          <h2>The workflow</h2>
           <p>
             Changes stay in a disposable checkout. Code execution stays inside
             restricted containers.

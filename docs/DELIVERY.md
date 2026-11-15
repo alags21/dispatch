@@ -36,8 +36,16 @@ Python installs used `PIP_CERT=/run/proxy-ca.pem`; Node installs used `NODE_EXTR
 
 ## Limits and remaining work
 
-Real model credentials are unavailable, so no live-provider run, live benchmark or routing savings claim is made. Configure a current tool/JSON-capable OpenAI-compatible provider and actual tier prices, then validate it.
+Real model credentials are unavailable, so no live-provider run, live benchmark or routing savings claim is made. Use the AI provider page to configure native Anthropic or a tool/JSON-capable OpenAI-compatible provider and current model prices, then validate it.
 
 The owner created `alags21/dispatch`; the project is now pushed to its main branch. The dashboard, browser title, UI initials, patch filenames, README and API documentation title use Dispatch. Internal configuration names retain compatibility. The renamed production build, browser workflow and API tests passed.
 
 The application is a single-operator development MVP, not a hardened multitenant service. Docker isolation shares a kernel. No automatic cloning, dependency installation, code merge or deployment occurs. Recovery preserves queued jobs but fails interrupted active executions safely. Security scanners and generated tests are not complete proofs; review remains human-owned.
+
+## Follow-up: provider onboarding and dark interface
+
+The application now includes a dark UI with self-hosted IBM Plex typography and an AI provider page. Users can configure a native Anthropic key or an OpenAI-compatible endpoint, discover model IDs, set one model or separate routing tiers, enter current rates, save an encrypted instance profile and run a small connection check. Advanced environment settings remain a fallback. Queued runs retain private encrypted provider snapshots; keys are not returned by APIs or put into sandbox mounts. The CLI benchmark runner can use a saved instance profile via --provider-runtime.
+
+Transport contracts, credential persistence/masking, snapshot stability, HTTP error redaction, budgets, native five-role orchestration and real Docker gates are covered by automated tests. Mock HTTP responses are labeled synthetic. Actual provider credentials are still unavailable, so no successful real-model run is claimed. Read the current README provider setup section for updated onboarding and installation commands.
+
+Follow-up verification: **51 backend tests** with Docker and Semgrep enabled; **3 browser tests**; production type checking/build and ancestor-package isolation regression; both application images built; static checks and npm audit passed. The dashboard and provider-page screenshots reflect the dark interface. These checks do not include an actual provider credential or real-model benchmark.

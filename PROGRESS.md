@@ -9,7 +9,7 @@
 - [x] Phase 7: five independent benchmark fixtures; 15/15 scripted comparisons verified in Docker; measured JSON report
 - [x] Phase 8 independent checks: backend and browser suites, production build, migrations round trip, both container builds, Compose startup, actionlint, dependency audit, documentation
 - [ ] External: validate against a real model provider (credentials unavailable)
-- [ ] External: create/publish the GitHub repository (connected plugin has no creation tool; authenticated cloud CLI is denied createRepository permission)
+- [x] GitHub repository published: https://github.com/alags21/dispatch (main).
 
 ## Acceptance checklist
 
@@ -51,7 +51,7 @@
 
 ## External blockers and exact next steps
 
-**GitHub:** The installed connector authenticates as `alags21`. It supports file/Git object writes but does not expose repository creation. The cloud CLI initially returned HTTP 401. On recheck, `gh api user` authenticated successfully as `alags21`, but `gh repo create alags21/forgeops --public` was rejected with `Resource not accessible by integration (createRepository)`. Authentication works; repository-creation permission is missing. A narrow lookup of `alags21/forgeops` returned 404 (missing or inaccessible). Create an empty repository and grant the GitHub app access, then provide its URL; alternatively authorize a cloud GitHub connection with repository-creation/write permission. No GitHub repository or remote publication is claimed.
+**GitHub:** The owner created `alags21/dispatch` and granted access. The tested project and Dispatch UI were pushed to its main branch. Repository creation is no longer a blocker. GitHub Actions is configured and runs on pushes; remote CI results should be checked separately from the recorded local verification.
 
 **Live models:** Set FORGEOPS_API_KEY, all three model IDs, current prices, and the compatible endpoint. Then submit a live run and run `benchmarks/run.py --mode live`. Until that happens, transport contract tests establish adapter mechanics only, not provider compatibility or autonomous task quality.
 
@@ -62,4 +62,4 @@ Single operator and one serial worker; no public hosting or multitenant security
 ## Dispatch branding and GitHub publication
 
 - [x] Rename the dashboard, browser title, UI initials, downloaded patches, API documentation title, and README to Dispatch. Internal configuration names retain compatibility.
-- [ ] Verify the renamed production UI and publish to https://github.com/alags21/dispatch.
+- [x] Verify the renamed production UI and publish to https://github.com/alags21/dispatch. Frontend type checking/build, the real browser workflow, and API regression checks pass.

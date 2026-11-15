@@ -1,6 +1,6 @@
 # Delivery verification
 
-ForgeOps is implemented and demonstrable in the cloud workspace at `/workspace/forgeops`. The source repository is local; GitHub publication and live-provider validation remain external blockers. PROGRESS.md contains the full acceptance checklist.
+Dispatch is implemented and demonstrable in the cloud workspace at `/workspace/forgeops`. The source repository is published at https://github.com/alags21/dispatch. Live-provider validation still requires credentials. PROGRESS.md contains the full acceptance checklist.
 
 ## Implemented system
 
@@ -38,6 +38,6 @@ Python installs used `PIP_CERT=/run/proxy-ca.pem`; Node installs used `NODE_EXTR
 
 Real model credentials are unavailable, so no live-provider run, live benchmark or routing savings claim is made. Configure a current tool/JSON-capable OpenAI-compatible provider and actual tier prices, then validate it.
 
-GitHub is connected as alags21, but connector tools cannot create repositories; the cloud CLI now authenticates successfully but GitHub rejects repository creation with `Resource not accessible by integration (createRepository)`. The requested remote repository has not been created or published. An empty repository with connected-app write access, or a cloud GitHub connection authorized for repository creation, is needed to finish publication.
+The owner created `alags21/dispatch`; the project is now pushed to its main branch. The dashboard, browser title, UI initials, patch filenames, README and API documentation title use Dispatch. Internal configuration names retain compatibility. The renamed production build, browser workflow and API tests passed.
 
 The application is a single-operator development MVP, not a hardened multitenant service. Docker isolation shares a kernel. No automatic cloning, dependency installation, code merge or deployment occurs. Recovery preserves queued jobs but fails interrupted active executions safely. Security scanners and generated tests are not complete proofs; review remains human-owned.

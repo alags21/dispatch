@@ -21,10 +21,10 @@ export function Shell({ children }: { children: React.ReactNode }) {
           <span className="brand-mark">
             <Boxes size={23} />
           </span>
-          ForgeOps<span className="version">BETA</span>
+          Dispatch<span className="version">BETA</span>
         </Link>
         <div className="workspace">
-          <span className="workspace-avatar">F</span>
+          <span className="workspace-avatar">D</span>
           <div>
             Engineering workspace<small>Personal · MVP</small>
           </div>
@@ -81,9 +81,9 @@ export function Shell({ children }: { children: React.ReactNode }) {
           </form>
         )}
         <div className="sidebar-footer">
-          <span className="avatar">FO</span>
+          <span className="avatar">D</span>
           <div>
-            ForgeOps<small>Local development</small>
+            Dispatch<small>Local development</small>
           </div>
         </div>
       </aside>
@@ -105,7 +105,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
         </header>
         <main>{children}</main>
         <footer>
-          ForgeOps <span>Build with intent. Verify with evidence.</span>
+          Dispatch <span>Build with intent. Verify with evidence.</span>
           <span>v0.1.0</span>
         </footer>
       </div>

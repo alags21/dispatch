@@ -80,7 +80,7 @@ export default function Detail({
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `forgeops-${id}.patch`;
+    a.download = `dispatch-${id}.patch`;
     a.click();
     URL.revokeObjectURL(url);
   }

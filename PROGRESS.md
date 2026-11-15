@@ -1,4 +1,4 @@
-# ForgeOps implementation progress
+# Dispatch implementation progress
 
 - [x] Phase 1: repository, Python/Next.js, Pydantic schemas, SQLAlchemy, Alembic, health, CI
 - [x] Phase 2: provider protocol, OpenAI-compatible tool loop, scoped workspace tools, five roles, labeled scripted provider
@@ -58,3 +58,8 @@
 ## Operational limits
 
 Single operator and one serial worker; no public hosting or multitenant security. Queued jobs survive restart; interrupted active jobs fail closed and must be resubmitted. Docker shares the host kernel. The tested sandbox supports Python dependencies baked into its image. Costs are configuration-based estimates; transport failures can leave unknown provider billing. Reviewer judgment remains mandatory. See docs/SECURITY.md and docs/OPERATIONS.md.
+
+## Dispatch branding and GitHub publication
+
+- [x] Rename the dashboard, browser title, UI initials, downloaded patches, API documentation title, and README to Dispatch. Internal configuration names retain compatibility.
+- [ ] Verify the renamed production UI and publish to https://github.com/alags21/dispatch.

@@ -45,7 +45,7 @@ def create_app(settings=None, engine_override=None):
         db_engine.dispose()
 
     app = FastAPI(
-        title="ForgeOps",
+        title="Dispatch",
         version="0.1.0",
         lifespan=lifespan,
         description="Evidence-driven engineering orchestration. Scripted fixture mode is not live model evidence.",

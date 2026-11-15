@@ -1,10 +1,10 @@
-# ForgeOps
+# Dispatch
 
 **Engineering, orchestrated. Evidence, retained.**
 
-ForgeOps turns a software task and a local Git repository into a reviewable patch using five specialized agents and mandatory security/testing gates. A deterministic state machine owns decisions; model statements never substitute for validation. No workflow merges code.
+Dispatch turns a software task and a local Git repository into a reviewable patch using five specialized agents and mandatory security/testing gates. A deterministic state machine owns decisions; model statements never substitute for validation. No workflow merges code.
 
-![ForgeOps dashboard displaying actual API data](docs/dashboard.png)
+![Dispatch dashboard displaying actual API data](docs/dashboard.png)
 
 ## What works
 
@@ -44,6 +44,8 @@ See [ARCHITECTURE.md](ARCHITECTURE.md), [execution boundaries](docs/SECURITY.md)
 Requires Python 3.12+, Node.js 22+, Git and a running Docker daemon. No model credentials are needed for the **scripted fixture demo**. Commands below start the app on a development machine or a persistent cloud workspace; no paid infrastructure is provisioned.
 
 ```sh
+git clone https://github.com/alags21/dispatch.git
+cd dispatch
 python -m venv .venv
 .venv/bin/pip install -c backend/requirements.lock -e './backend[test]'
 python demo/prepare.py
@@ -97,7 +99,7 @@ Evidence is saved to `demo/evidence.json`. Scripted agent responses use **known 
 
 ## Real model mode
 
-Copy `.env.example` to `backend/.env` for host startup. Set `FORGEOPS_API_KEY`, your provider URL, three current model IDs, and `FORGEOPS_PRICING_JSON` keyed by those IDs. Each pricing entry contains numeric `input_per_million` and `output_per_million` USD rates. No model names or prices are hardcoded. Set `FORGEOPS_REPOSITORY_ROOT` to a directory containing the repositories you explicitly want ForgeOps to access. Create a run in **Live model execution** mode with its actual requirements.
+Copy `.env.example` to `backend/.env` for host startup. Set `FORGEOPS_API_KEY`, your provider URL, three current model IDs, and `FORGEOPS_PRICING_JSON` keyed by those IDs. Each pricing entry contains numeric `input_per_million` and `output_per_million` USD rates. No model names or prices are hardcoded. Set `FORGEOPS_REPOSITORY_ROOT` to a directory containing the repositories you explicitly want Dispatch to access. Create a run in **Live model execution** mode with its actual requirements.
 
 The OpenAI-compatible chat-completions adapter supports structured function tools and validated JSON outputs. The provider must support these features. Its transport/tool loop is tested with `httpx.MockTransport`. A real-provider execution was **not performed** in this delivery because model credentials are unavailable. Validate against your provider before relying on it.
 

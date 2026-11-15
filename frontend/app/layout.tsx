@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Shell } from "./components";
 export const metadata: Metadata = {
-  title: "ForgeOps — Engineering, orchestrated",
+  title: "Dispatch — Engineering, orchestrated",
   description:
     "Run engineering workflows with adaptive agents and deterministic verification gates.",
 };

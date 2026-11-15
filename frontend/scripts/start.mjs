@@ -1,6 +1,16 @@
 import { cp, access } from "node:fs/promises";
 import { spawn } from "node:child_process";
 
+try {
+  await access(".next/standalone/server.js");
+} catch (error) {
+  if (error.code !== "ENOENT") throw error;
+  console.error(
+    "Dispatch has no production build. Run npm run build successfully before npm run start.",
+  );
+  process.exit(1);
+}
+
 await cp(".next/static", ".next/standalone/.next/static", { recursive: true });
 try {
   await access("public");

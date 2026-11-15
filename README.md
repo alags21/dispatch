@@ -139,3 +139,11 @@ This MVP supports Python projects whose dependencies are present in the reviewed
 Bandit scans modified Python; optional Semgrep adds local rules. Neither is a complete security audit. Generated tests can miss requirements and hostile repositories can game their own suites. Review the evidence and patch yourself. LLM security findings are clearly marked unverified. See [security](docs/SECURITY.md) for the full trust model.
 
 Future work: provider-specific compatibility tests, hardened microVM execution, richer repository/dependency adapters, organization authorization, stronger independent acceptance evaluators, resumable stage checkpoints, and routing-policy learning from measured live outcomes.
+
+## WSL startup troubleshooting
+
+Node 22 or newer is supported; Node 24 does not require switching versions with nvm. If you use nvm with zsh, it must be loaded in that shell before its commands are available.
+
+Dispatch bounds Webpack module/loader discovery and Next.js tracing to the frontend. Unrelated package files or node_modules in your home directory should not affect the app. The regression check `cd frontend && npm run test:build-isolation` builds beneath an empty ancestor package.json, an unrelated pnpm lockfile, and an ancestor node_modules directory.
+
+After updating an existing checkout, run `git pull --ff-only` from the repository root, then `cd frontend && npm ci && npm run build && npm run start`. The start command requires a successful production build. If a previous failed build left stale output, remove only `frontend/.next` and rebuild. Keep the backend running separately on port 8010.

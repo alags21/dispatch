@@ -63,3 +63,10 @@ Single operator and one serial worker; no public hosting or multitenant security
 
 - [x] Rename the dashboard, browser title, UI initials, downloaded patches, API documentation title, and README to Dispatch. Internal configuration names retain compatibility.
 - [x] Verify the renamed production UI and publish to https://github.com/alags21/dispatch. Frontend type checking/build, the real browser workflow, and API regression checks pass.
+
+## WSL frontend startup hardening
+
+- [x] Set explicit frontend tracing/Turbopack roots and bound Webpack module and loader lookup to the frontend while preserving nested dependency resolution.
+- [x] Explain a missing production build before trying to start the standalone server.
+- [x] Reproduce the exact failure with Node 24.15.0, an empty ancestor package.json, an unrelated pnpm lockfile, and ancestor node_modules. The fixed production build and standalone HTTP startup pass without modifying the ancestor files.
+- [x] Frontend type checking, the build-isolation regression, the full browser workflow, startup error handling, and CI configuration validation pass. The build-isolation regression is included in CI.
